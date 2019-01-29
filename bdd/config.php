@@ -1,0 +1,9 @@
+<?php
+    $hote='localhost';
+    $port='';
+    $nom_bd='academage-test';
+    $identifiant='root';
+    $mot_de_passe='';
+    $encodage='utf8';
+    $debug=true;
+?>

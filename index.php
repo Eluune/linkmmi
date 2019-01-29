@@ -18,7 +18,7 @@
   </head>
 
   <body>
-      <h1>Linkmmi</h1>
+
     <script src="js/script.js" type="text/javascript"></script>
   </body>
 </html>
