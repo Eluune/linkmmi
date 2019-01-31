@@ -2,11 +2,21 @@ body {
   margin: 0;
 }
 
-nav {
-  position: fixed;
-  top: 0;
+* {
+  font-family: Helvetica, sans-serif;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+em {
+  font-style: normal;
+  color: #fbc531;
+}
+
+nav {
+  z-index: 100;
+  position: fixed;
+  top: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -70,9 +80,9 @@ nav .blcNav form input {
   height: 20px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-areas: "ban ban ban" "Pro Flu Not";
+  -ms-grid-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-areas: "ban ban ban ban" "Pro Flu Flu Not";
   grid-gap: 20px;
 }
 
@@ -83,12 +93,148 @@ nav .blcNav form input {
   border-radius: 0.5em;
   -ms-grid-row: 1;
   -ms-grid-column: 1;
-  -ms-grid-column-span: 3;
+  -ms-grid-column-span: 4;
   grid-area: ban;
   width: 100%;
 }
 
 .content .profil {
+  border-radius: 0.5em;
   background-color: #fbc531;
+  position: relative;
+  padding-top: 200px;
+  height: 300px;
+  -webkit-box-shadow: 1px 2px 4px #d0d0d0;
+          box-shadow: 1px 2px 4px #d0d0d0;
+}
+
+.content .profil .profilPict {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.content .profil .contentProfil {
+  position: relative;
+  background-color: #eee;
+  height: 12.5em;
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  -webkit-box-shadow: 1px 2px 4px #d0d0d0;
+          box-shadow: 1px 2px 4px #d0d0d0;
+}
+
+.content .profil .contentProfil .descProfil {
+  position: relative;
+  top: -4em;
+  border-radius: 0.5em;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0.5em;
+  background-color: #fff;
+  -webkit-box-shadow: 1px 2px 4px gray;
+          box-shadow: 1px 2px 4px gray;
+}
+
+.content .profil .contentProfil .descProfil em {
+  font-size: 0.7em;
+}
+
+.content .profil .contentProfil .descProfil .profilNum {
+  display: inline-block;
+  width: 49%;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 2em;
+}
+
+.content .profil .contentProfil .descProfil .profilNum em {
+  font-size: 2em;
+}
+
+.content .profil .contentProfil .subBtn {
+  color: #4989ff;
+  background-color: #eee;
+  width: 80%;
+  margin: 0 auto;
+  padding: 0.5em;
+  text-align: center;
+  border-bottom-left-radius: 2em 50%;
+  border-bottom-right-radius: 2em 50%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, 40%);
+          transform: translate(-50%, 40%);
+  -webkit-box-shadow: 0px 3px 3px #ddd;
+          box-shadow: 0px 3px 3px #ddd;
+}
+
+.content .flux {
+  -ms-grid-row: 2;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 2;
+  grid-area: Flu;
+  border-radius: 0.5em;
+  position: relative;
+}
+
+.content .flux .article .author {
+  padding: 1em;
+}
+
+.content .flux .article .author .authorPict {
+  display: inline-block;
+  width: 3em;
+  height: 3em;
+  border-radius: 2em;
+}
+
+.content .flux .article .author h3 {
+  margin-top: 0;
+  display: inline-block;
+}
+
+.content .flux .article .author h3 em {
+  font-size: 0.7em;
+}
+
+.content .flux .article .contentTxt {
+  padding: 1em;
+  text-align: justify;
+}
+
+.content .flux .article .contentPict {
+  max-height: 500px;
+  width: 100%;
+}
+
+.content .flux .article .contentPict img {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 100%;
+}
+
+.content .flux .article .contentDetails {
+  padding: 1em;
+}
+
+.content .flux .article .contentcomm {
+  background-color: #ddd;
+}
+
+.content .flux .article .contentcomm ul li {
+  list-style-type: none;
+  padding-bottom: 0.5em;
+}
+
+.content .flux .article .contentcomm ul li em {
+  color: #4989ff;
 }
 /*# sourceMappingURL=profil.css.map */
