@@ -24,8 +24,10 @@ mailUser CHAR(100),
 passwordUser CHAR(100),
 prenomUser CHAR(100),
 nomUser CHAR(100),
+descriptionUser TEXT,
 birthdayUser DATE,
 photoUser CHAR(100),
+banniereUser CHAR(100),
 portfolioUser CHAR(100),
 PRIMARY KEY (idUser)) ENGINE=InnoDB;
 
