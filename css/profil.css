@@ -1,0 +1,94 @@
+body {
+  margin: 0;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  border-bottom: thin solid lightgrey;
+  padding: 0.5em;
+  -webkit-box-shadow: 0px 1px 3px grey;
+          box-shadow: 0px 1px 3px grey;
+  margin: 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+nav .blcNav .navProfil {
+  height: 2em;
+  border-radius: 2em;
+  vertical-align: bottom;
+}
+
+nav .blcNav form {
+  display: inline-block;
+}
+
+nav .blcNav form input {
+  padding: 0.5em;
+  border-radius: 2em;
+  border: thin solid lightgrey;
+}
+
+.btn-Y-R {
+  color: white;
+  background-color: #fbc531;
+  border: none;
+  padding: 0.5em;
+  border-radius: 2em;
+}
+
+.btn-Icone {
+  background-color: transparent;
+  color: #303030;
+  border: none;
+  line-height: 1;
+  font-size: 1.5em;
+}
+
+.btn-Icone.active {
+  color: #fbc531;
+}
+
+.content {
+  margin: 1em;
+  margin-top: 4em;
+  height: 20px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas: "ban ban ban" "Pro Flu Not";
+  grid-gap: 20px;
+}
+
+.content .banniere {
+  height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 0.5em;
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-area: ban;
+  width: 100%;
+}
+
+.content .profil {
+  background-color: #fbc531;
+}
+/*# sourceMappingURL=profil.css.map */

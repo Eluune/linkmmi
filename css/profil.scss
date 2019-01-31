@@ -1,0 +1,74 @@
+$c-yellow:#fbc531;
+
+body{
+    margin: 0;
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: thin solid lightgrey;
+    padding: 0.5em;
+    box-shadow: 0px 1px 3px grey;
+    margin: 0;
+    width: 100%;
+    background-color: #fff;
+    .blcNav{
+        .navProfil{
+            height: 2em;
+            border-radius: 2em;
+            vertical-align: bottom;
+        }
+        form{
+            display: inline-block;
+            input{
+                padding: 0.5em;
+                border-radius: 2em;
+                border: thin solid lightgrey;
+            }
+        }
+    }
+}
+.btn-Y-R{
+    color: white;
+    background-color: $c-yellow;
+    border: none;
+    padding: 0.5em;
+    border-radius: 2em;
+}
+.btn-Icone{
+    background-color: transparent;
+    color: #303030;
+    border: none;
+    line-height: 1;
+    font-size: 1.5em;
+    &.active{
+        color: $c-yellow;
+    }
+}
+.content{
+    margin: 1em;
+    margin-top: 4em;
+    height: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: 
+    "ban ban ban"
+    "Pro Flu Not";
+    grid-gap: 20px;
+    .banniere{
+        height: 300px;
+        object-fit: cover;
+        border-radius: 0.5em;
+        grid-area: ban;
+        width: 100%;
+    }
+    .profil{
+        background-color: $c-yellow;
+    }
+}
