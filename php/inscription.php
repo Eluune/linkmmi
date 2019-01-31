@@ -1,14 +1,5 @@
 <?php
 
-  /* ------------------------------------------------------ *\
-   * Inscription
-  \* ------------------------------------------------------ */
-  //
-  // idUser* mailUser* passwordUser*
-  // nomUser* prenomUser*
-  // naissanceUser
-  //
-
   include("../bdd/config.php");
   include("../bdd/bdd.php");
 
@@ -22,7 +13,5 @@
     $requete->bindParam(':mdp', $_POST["passwordUser"]);
     $requete->execute();
   }
-
-  
 
 ?>
