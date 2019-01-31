@@ -42,18 +42,26 @@
     <div class="section-center">
       <div class="actualitées">
 
-        <div class="photo-actualitées">
-        </div> <!-- Fermeture .photo-actualité -->
+        <div class="utilisateur">
 
-        <div class="info-utilisateur">
-          <h2>Marie Durant</h2>
-          <a href="#">@Marie_Drnt</a>
-        </div> <!-- Fermeture .info-utilisateur -->
+          <div class="photo-utilisateur">
+            <img src="img/photo-utilisateur.jpg" alt="Photo de profile de l'utilisateur">
+          </div> <!-- Fermeture .photo-utilisateur -->
+
+          <div class="info-utilisateur">
+            <h2>Marie Durant</h2>
+            <a href="#">@Marie_Drnt</a>
+          </div> <!-- Fermeture .info-utilisateur -->
+
+        </div> <!-- Fermeture .utilisateur -->
 
         <p class="content-actualité">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
         <div class="image-content">
+          <img src="img/photo-content.jpg" alt="Image de publication">
         </div> <!-- Fermeture .image-content -->
+
+        <p class="date-publication">Publié à <span> 12h00 le 21 janvier 2018</span> </p>
 
       </div> <!-- Fermeture .actualitées -->
     </div> <!-- Fermeture .section-center -->
