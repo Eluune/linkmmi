@@ -39,34 +39,22 @@ portfolioUser CHAR(100),
 idTopic BIGINT(8),
 PRIMARY KEY (idUser)) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS article ;
-CREATE TABLE article (idArticle BIGINT(8) AUTO_INCREMENT NOT NULL,
-contenuArticle TEXT,
-PRIMARY KEY (idArticle)) ENGINE=InnoDB;
+DROP TABLE IF EXISTS commentaire ;
+CREATE TABLE commentaire (idCommentaire BIGINT(8) AUTO_INCREMENT NOT NULL,
+contenuCommentaire TEXT,
+PRIMARY KEY (idCommentaire)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS topic ;
 CREATE TABLE topic (idTopic BIGINT(8) AUTO_INCREMENT NOT NULL,
 nomTopic CHAR(120),
-idArticle BIGINT(8),
+idCommentaire BIGINT(8),
 PRIMARY KEY (idTopic)) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS reference_par ;
-CREATE TABLE reference_par (idArticle BIGINT(8) AUTO_INCREMENT NOT NULL,
-idTag BIGINT(8) NOT NULL,
-PRIMARY KEY (idArticle,
- idTag)) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS aime ;
-CREATE TABLE aime (idArticle BIGINT(8) AUTO_INCREMENT NOT NULL,
-idUser BIGINT(8) NOT NULL,
-PRIMARY KEY (idArticle,
- idUser)) ENGINE=InnoDB;
-
 DROP TABLE IF EXISTS publie ;
-CREATE TABLE publie (idArticle BIGINT(8) AUTO_INCREMENT NOT NULL,
+CREATE TABLE publie (idCommentaire BIGINT(8) AUTO_INCREMENT NOT NULL,
 idUser BIGINT(8) NOT NULL,
-dateArticle DATETIME,
-PRIMARY KEY (idArticle,
+dateCommentaire DATETIME,
+PRIMARY KEY (idCommentaire,
  idUser)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS rejoint ;
@@ -90,16 +78,24 @@ finTravail DATE,
 PRIMARY KEY (idUser,
  idTravail)) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS aime ;
+CREATE TABLE aime (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,
+idTopic BIGINT(8) NOT NULL,
+PRIMARY KEY (idUser,
+ idTopic)) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS reference ;
+CREATE TABLE reference (idTag BIGINT(8) AUTO_INCREMENT NOT NULL,
+idTopic BIGINT(8) NOT NULL,
+PRIMARY KEY (idTag,
+ idTopic)) ENGINE=InnoDB;
+
 ALTER TABLE section ADD CONSTRAINT FK_section_idTopic FOREIGN KEY (idTopic) REFERENCES topic (idTopic);
 
 ALTER TABLE conversation ADD CONSTRAINT FK_conversation_idMessage FOREIGN KEY (idMessage) REFERENCES message (idMessage);
 ALTER TABLE utilisateur ADD CONSTRAINT FK_utilisateur_idTopic FOREIGN KEY (idTopic) REFERENCES topic (idTopic);
-ALTER TABLE topic ADD CONSTRAINT FK_topic_idArticle FOREIGN KEY (idArticle) REFERENCES article (idArticle);
-ALTER TABLE reference_par ADD CONSTRAINT FK_reference_par_idArticle FOREIGN KEY (idArticle) REFERENCES article (idArticle);
-ALTER TABLE reference_par ADD CONSTRAINT FK_reference_par_idTag FOREIGN KEY (idTag) REFERENCES tag (idTag);
-ALTER TABLE aime ADD CONSTRAINT FK_aime_idArticle FOREIGN KEY (idArticle) REFERENCES article (idArticle);
-ALTER TABLE aime ADD CONSTRAINT FK_aime_idUser FOREIGN KEY (idUser) REFERENCES utilisateur (idUser);
-ALTER TABLE publie ADD CONSTRAINT FK_publie_idArticle FOREIGN KEY (idArticle) REFERENCES article (idArticle);
+ALTER TABLE topic ADD CONSTRAINT FK_topic_idCommentaire FOREIGN KEY (idCommentaire) REFERENCES commentaire (idCommentaire);
+ALTER TABLE publie ADD CONSTRAINT FK_publie_idCommentaire FOREIGN KEY (idCommentaire) REFERENCES commentaire (idCommentaire);
 ALTER TABLE publie ADD CONSTRAINT FK_publie_idUser FOREIGN KEY (idUser) REFERENCES utilisateur (idUser);
 ALTER TABLE rejoint ADD CONSTRAINT FK_rejoint_idUser FOREIGN KEY (idUser) REFERENCES utilisateur (idUser);
 ALTER TABLE rejoint ADD CONSTRAINT FK_rejoint_idConversation FOREIGN KEY (idConversation) REFERENCES conversation (idConversation);
@@ -107,3 +103,7 @@ ALTER TABLE envoie ADD CONSTRAINT FK_envoie_idUser FOREIGN KEY (idUser) REFERENC
 ALTER TABLE envoie ADD CONSTRAINT FK_envoie_idMessage FOREIGN KEY (idMessage) REFERENCES message (idMessage);
 ALTER TABLE travaildans ADD CONSTRAINT FK_travaildans_idUser FOREIGN KEY (idUser) REFERENCES utilisateur (idUser);
 ALTER TABLE travaildans ADD CONSTRAINT FK_travaildans_idTravail FOREIGN KEY (idTravail) REFERENCES travail (idTravail);
+ALTER TABLE aime ADD CONSTRAINT FK_aime_idUser FOREIGN KEY (idUser) REFERENCES utilisateur (idUser);
+ALTER TABLE aime ADD CONSTRAINT FK_aime_idTopic FOREIGN KEY (idTopic) REFERENCES topic (idTopic);
+ALTER TABLE reference ADD CONSTRAINT FK_reference_idTag FOREIGN KEY (idTag) REFERENCES tag (idTag);
+ALTER TABLE reference ADD CONSTRAINT FK_reference_idTopic FOREIGN KEY (idTopic) REFERENCES topic (idTopic);
