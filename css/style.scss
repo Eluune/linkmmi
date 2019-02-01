@@ -52,7 +52,7 @@ html,body
   transform: translate(-50%, -50%);
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 3fr 2fr;
   grid-template-areas: "l c r";
 
   .section-left {
@@ -218,7 +218,7 @@ html,body
 
       .image-content {
         width: 100%;
-        height: 40vh; 
+        height: 40vh;
 
         img {
           width: 100%;
