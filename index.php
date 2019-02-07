@@ -14,6 +14,7 @@
 
   <!-- Links -->
   <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 
 <body>
@@ -40,6 +41,9 @@
     </div> <!-- Fermeture .section-left -->
 
     <div class="section-center">
+      <?php
+        for($i = 0; $i < 4; $i++) {
+       ?>
       <div class="actualitées">
 
         <div class="utilisateur">
@@ -63,7 +67,29 @@
 
         <p class="date-publication">Publié à <span> 12h00 le 21 janvier 2018</span> </p>
 
+        <i class="icofont-ui-love like"></i>
+        <p class="nb-like">300</p>
+
+        <i class="icofont-speech-comments comments" data-number="<?php echo $i; ?>"></i>
+        <p class="nb-comments">200</p>
       </div> <!-- Fermeture .actualitées -->
+
+      <div class="section-comments" id="comments-<?php echo $i; ?>">
+
+        <div class="commentaire-users">
+          <a href="#"> @Sarah_Crch </a>
+          <p>Voici mon commentaire</p>
+        </div>
+
+        <div class="photo-utilisateur-comments">
+          <img src="img/photo-utilisateur.jpg" alt="Photo de profile de l'utilisateur">
+        </div> <!-- Fermeture .photo-utilisateur-comments -->
+
+        <input type="text" name="" placeholder="Ajouter un commentaire...">
+      </div> <!-- Fermeture .section-comments -->
+      <?php
+        }
+      ?>
     </div> <!-- Fermeture .section-center -->
 
     <div class="section-right">
@@ -80,5 +106,7 @@
   </div>
 
   <script src="js/script.js" type="text/javascript"></script>
+  <script src="js/section-connexion.js" type="text/javascript"></script>
+
 </body>
 </html>
