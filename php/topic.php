@@ -3,11 +3,9 @@
   /* ------------------------------------------------------ *\
    * Créer un topic - Edit un topic - Supprimer un topic
   \* ------------------------------------------------------ */
-  //
-  //
-  //
 
   $date = date("Y-m-d H:i:s");
+  $idUser = $_SESSION['id'];
 
   include("../bdd/config.php");
   include("../bdd/bdd.php");
@@ -17,7 +15,7 @@
   $tags=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
 
-  if(isset($_POST['create']))
+  if(isset($_POST['create'])) // /!\ Penser à mettre ça dans le formulaire : enctype="multipart/form-data"
   {
     // récupérer dans le formulaire :
       // contenuTopic
@@ -36,30 +34,34 @@
     $resultats->closeCursor();
 
     // insérer les images
-    $envoi = false;
-    if(isset($_FILES['image']) AND $_FILES['image']['error'] == 0){
-      if($_FILES['image']['size'] <= 100000){
-        $infosfichier = pathinfo($_FILES['image']['name']);
-        $extension_upload = $infosfichier['extension'];
-        $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+    if($_FILES['imgTopic']['error'] == 0)
+    {
+      if($_FILES['imgTopic']['size'] > 2000000)
+      {
+          // réduire l'image
+      }
+      $infosfichier = pathinfo($_FILES['imgTopic']['name']);
+      $extension_upload = $infosfichier['extension'];
+      $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
 
-        if(in_array($extension_upload, $extensions_autorisees)){
-          $url = time().''.$_FILES['image']['name'];
-          move_uploaded_file($_FILES['image']['tmp_name'], 'img/recettes/' . basename($url));
+      if(in_array($extension_upload, $extensions_autorisees))
+      {
+        $url = time().''.$_FILES['imgTopic']['name'];
+        move_uploaded_file($_FILES['imgTopic']['tmp_name'], 'img/'.basename($url));
 
-          $envoi = true;
+        $envoi = true;
 
-          $requete = $bdd->prepare("INSERT INTO tag (photoUser) VALUES (:photoUSer)");
-          $requete->bindParam(':photoUser', $url);
-          $requete->execute();
-        }
+        $requete = $bdd->prepare("UPDATE topic SET imgTopic = :imgTopic WHERE idTopic = :idTopic");
+        $requete->bindParam(':imgTopic', $url);
+        $requete->bindParam(':idTopic', $idTopic[0]);
+        $requete->execute();
       }
     }
 
-    // insérer les tags
-    if(!empty($_POST['tags']))
+    // insertion des tags entrés : création des nouveaux tags et référencement du topic
+    if(!empty($_POST['tagsTopic']))
     {
-      $tagsInit = explode('',$_POST['tags']);
+      $tagsInit = explode('',$_POST['tagsTopic']);
       $tagsEntres = array_unique($tagsInit);
 
       foreach($tagsEntres as $newTag)
@@ -68,14 +70,14 @@
         $increment = 0;
         do
         {
-          if($tagsEntres == tags[$increment]->nomTag)
+          if($newTag == tags[$increment]->nomTag)
           {
             $existant = true;
             $idTag = tags[$increment]->idTag;
           }
           $increment++;
         }
-        while (!$existant || $increment < count($tags));
+        while (!$existant && $increment < count($tags));
 
         if(!$existant)
         {
@@ -97,16 +99,49 @@
         $requete->execute();
       }
     }
+
+    header('location: /');
+    exit;
   }
-
-  if(isset($_POST['update']))
+  else if(isset($_POST['update']))
   {
+    // si le contenu est modifié
 
+    // si l'image est modifiée ou ajoutée
   }
-
-  if(isset($_POST['delete']))
+  else if(isset($_POST['delete']))
   {
+     // on récupère l'idUser du topic à supprimer
+    $requete="SELECT idUser FROM topic WHERE idTopic = ".$_GET['idTopic'];
+    $resultats=$bdd->query($requete);
+    $idAuteur=$resultats->fetch();
+    $resultats->closeCursor();
+     // on vérifie que l'idUser récupèrée et celle de l'user courant
+    if($idAuteur[0] == $idUser)
+    {
+      $requete = $bdd->prepare("DELETE FROM commentaire WHERE idTopic = :idTopic");
+      $requete->bindParam(':idTopic', $_GET['idTopic']);
+      $requete->execute();
 
+      $requete = $bdd->prepare("DELETE FROM reference WHERE idTopic = :idTopic");
+      $requete->bindParam(':idTopic', $_GET['idTopic']);
+      $requete->execute();
+
+      $requete = $bdd->prepare("DELETE FROM topic WHERE idTopic = :idTopic");
+      $requete->bindParam(':idTopic', $_GET['idTopic']);
+      $requete->execute();
+    }
+    else
+    {
+      // on ne peut pas supprimer
+    }
+
+    header('location: /');
+    exit;
+  }
+  else
+  {
+    // si on ne provient d'aucun formulaire
   }
 
 ?>
