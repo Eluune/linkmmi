@@ -1,15 +1,52 @@
-$c-yellow:#fbc531;
-
-body{
+$grey : #f1f1f1;
+$yellow : #fbc531;
+$blue : #62cccf;
+$black : #4A4A4A;
+$border-grey : #d5d5d5;
+%shadow {
+    box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
+}
+.c-yellow{
+    color: $yellow;
+}
+.c-grey{
+    color: $black;
+}
+body,html{
     margin: 0;
+    padding: 0;
+    color: $black;
 }
 *{
     font-family:  Helvetica, sans-serif;
     box-sizing: border-box;
 }
-em{
+.subBtn{
+    color: $blue;
+    background-color: #eee;
+    width: 80%;
+    max-width: 18em;
+    margin: 0 auto;
+    padding: 0.5em;
+    text-align: center;
+    border-bottom-left-radius: 2em 50%;
+    border-bottom-right-radius: 2em 50%;
+    border-top-left-radius: 2em 50%;
+    border-top-right-radius: 2em 50%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,40%);
+    @extend %shadow;
+}
+
+.highLight{
     font-style: normal;
-    color: $c-yellow;
+    color: $yellow;
+}
+.tagPpl{
+    font-style: normal;
+    color: $blue;
 }
 nav{
     z-index: 100;
@@ -21,7 +58,7 @@ nav{
     justify-content: space-between;
     border-bottom: thin solid lightgrey;
     padding: 0.5em;
-    box-shadow: 0px 1px 3px grey;
+    @extend %shadow;
     margin: 0;
     width: 100%;
     background-color: #fff;
@@ -43,20 +80,27 @@ nav{
 }
 .btn-Y-R{
     color: white;
-    background-color: $c-yellow;
+    background-color: $yellow;
     border: none;
     padding: 0.5em;
     border-radius: 2em;
 }
 .btn-Icone{
     background-color: transparent;
-    color: #303030;
+    color: $black;
     border: none;
     line-height: 1;
     font-size: 1.5em;
     &.active{
-        color: $c-yellow;
+        color: $yellow;
     }
+}
+.btn-suivre{
+    color: $blue;
+    border: solid thin $blue;
+    border-radius: 2em;
+    padding: 0.1em 2em;
+    background-color: transparent;
 }
 .content{
     margin: 1em;
@@ -66,8 +110,11 @@ nav{
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas: 
     "ban ban ban ban"
-    "Pro Flu Flu Not";
+    "Pro Flu Flu other";
+    justify-content: start;
+    align-content: start;
     grid-gap: 20px;
+    grid-auto-flow: dense;
     .banniere{
         height: 300px;
         object-fit: cover;
@@ -77,36 +124,37 @@ nav{
     }
     .profil{
         border-radius: 0.5em;
-        background-color: $c-yellow;
+        background-color: transparent;
         position: relative;
-        padding-top:200px;
-        height: 300px;
-        box-shadow: 1px 2px 4px #d0d0d0;
-        .profilPict{
-            height: 200px;
-            width: 200px;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%,-50%);
+        grid-area: Pro;
+        .profilPictContainer{
+            background-color: $yellow;
+            text-align: center;
+            border-top-left-radius: 0.5em;
+            border-top-right-radius: 0.5em;
+            .profilPict{
+                margin: 0 auto;
+                height: 200px;
+                width: 200px;
+                border-radius: 50%;
+                transform: translate(0%,-50%);
+            }
         }
         .contentProfil{
             position: relative;
             background-color: #eee;
-            height: 12.5em;
             border-bottom-left-radius: 0.5em;
             border-bottom-right-radius: 0.5em;
-            box-shadow: 1px 2px 4px #d0d0d0;
+            @extend %shadow;
             .descProfil{
                 position: relative;
-                top: -4em;
+                top: -2em;
                 border-radius: 0.5em;
                 width: 90%;
                 margin: 0 auto;
                 padding: 0.5em;
                 background-color: #fff;
-                box-shadow: 1px 2px 4px gray;
+                @extend %shadow;
                 em{
                     font-size: 0.7em;
                 }
@@ -121,28 +169,18 @@ nav{
                     }
                 }
             }
-            .subBtn{
-                color: #4989ff;
-                background-color: #eee;
-                width: 80%;
-                margin: 0 auto;
-                padding: 0.5em;
-                text-align: center;
-                border-bottom-left-radius: 2em 50%;
-                border-bottom-right-radius: 2em 50%;
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translate(-50%,40%);
-                box-shadow: 0px 3px 3px #ddd;
-            }
+            
         }
     }
     .flux{
         grid-area: Flu;
-        border-radius: 0.5em;
         position: relative;
         .article{
+            margin-bottom: 2em;
+            border-radius: 0.5em;
+            background-color: #eee;
+            @extend %shadow;
+            position: relative;
             .author{
                 padding: 1em;
                 .authorPict{
@@ -164,7 +202,8 @@ nav{
                 text-align: justify;
             }
             .contentPict{
-                max-height: 500px;
+                overflow: hidden;
+                height: 90vh;
                 width: 100%;
                 img{
                     width: 100%;
@@ -174,17 +213,125 @@ nav{
             }
             .contentDetails{
                 padding: 1em;
+                padding-bottom: 2em;
+                position: relative;
+                .subBtn{
+                    color: $black;
+                    @extend %shadow;
+                    display: flex;
+                    justify-content: space-evenly;
+                }
             }
             .contentcomm{
+                padding: 2em 1em;
                 background-color: #ddd;
                 ul{
                     li{
                         list-style-type: none;
                         padding-bottom: 0.5em;
-                        em{
-                            color: #4989ff;
-                        }
                     }
+                }
+                .subBtn{
+                    background-color: #ddd;
+                    @extend %shadow;
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+            }
+        }
+    }
+    .other{
+        grid-area: other;
+        position: relative;
+        text-align: center;
+        .suggest{
+            text-align:left;
+            background-color: #eee;
+            @extend %shadow;
+            padding: 0.5em;
+            padding-bottom: 1.5em;
+            position: relative;
+            margin-bottom: 2em;
+            .blcPpl{
+                padding: 0.5em;
+                padding-bottom: 1em;
+                background-color: #fff;
+                border-radius: 0.5em;
+                margin-bottom: 0.8em;
+                @extend %shadow;
+                position: relative;
+                .blcPplPict{
+                    border-radius: 50%;
+                    height: 4em;
+                    width: 4em;
+                    float: left;
+                    margin-right: 0.5em;
+                }
+                p{
+                    margin-bottom: 0.5em;
+                    margin-top: 0.5em;
+                    .highLight{
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+        .message{
+            text-align:left;
+            background-color: #eee;
+            @extend %shadow;
+            padding: 0.5em;
+            padding-bottom: 1.5em;
+            position: relative;
+            margin-bottom: 2em;
+            .blcMess{
+                padding: 0.5em;
+                padding-bottom: 1em;
+                background-color: #fff;
+                border-radius: 0.5em;
+                margin-bottom: 0.8em;
+                @extend %shadow;
+                position: relative;
+                .blcMessPict{
+                    border-radius: 50%;
+                    height: 4em;
+                    width: 4em;
+                    float: left;
+                    margin-right: 0.5em;
+                }
+                p{
+                    margin-bottom: 0.5em;
+                    margin-top: 0.5em;
+                    .highLight{
+                        float: right;
+                        font-size: 0.8em;
+                    }
+                }
+                .extraitMess{
+                    margin-top: 1.2em;
+                    margin-bottom: 0.2em;
+                    font-size: 0.8em;
+                }
+            }
+            form{
+                position: relative;
+                input{
+                    background-color: transparent;
+                    padding: 0.5em;
+                    border-radius: 2em;
+                    border: thin solid #fff;
+                    margin: 0 auto;
+                    width: 100%;
+                }
+                button{
+                    position: absolute;
+                    background-color: #fff;
+                    border-radius: 2em;
+                    width: 2em;
+                    height: 2em;
+                    border: none;
+                    top: 0.15em;
+                    right: 0.2em;
                 }
             }
         }
