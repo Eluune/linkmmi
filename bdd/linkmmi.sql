@@ -41,9 +41,9 @@ PRIMARY KEY (idCommentaire)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS topic ;
 CREATE TABLE topic (idTopic BIGINT(8) AUTO_INCREMENT NOT NULL,
-nomTopic CHAR(120),
-imgTopic_topic CHAR(100),
-dateTopic_topic DATETIME,
+imgTopic CHAR(100),
+contenuTopic TEXT,
+dateTopic DATETIME,
 idUser BIGINT(8),
 PRIMARY KEY (idTopic)) ENGINE=InnoDB;
 

@@ -17,78 +17,96 @@
   $tags=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
 
-  switch ($_POST['submit'])
+  if(isset($_POST['create']))
   {
-    case 'create':
-        // récupérer dans le formulaire :
-          // contenuTopic
-          // tagsTopic
-          // eventuellement imgTopic
+    // récupérer dans le formulaire :
+      // contenuTopic
+      // tagsTopic
+      // eventuellement imgTopic
 
-        // fonction pour récupérer l'image et réduire l'image
+    $requete = $bdd->prepare("INSERT INTO topic (contenuTopic, dateTopic, idUser) VALUES (:contenuTopic, :dateTopic, :idUser)");
+    $requete->bindParam(':contenuTopic', $_POST["contenuTopic"]);
+    $requete->bindParam(':dateTopic', $date);
+    $requete->bindParam(':idUser', $idUser);
+    $requete->execute();
 
-        $requete = $bdd->prepare("INSERT INTO topic (contenuTopic, dateCommentaire) VALUES (:contenuCommentaire, :dateCommentaire)");
-        $requete->bindParam(':contenuCommentaire', $_POST["contenuTopic"]);
-        $requete->bindParam(':dateCommentaire', $date);
-        $requete->execute();
+    $requete="SELECT idTopic FROM topic WHERE idUser = ".$idUser." AND dateTopic = '".$date."'";
+    $resultats=$bdd->query($requete);
+    $idTopic=$resultats->fetch();
+    $resultats->closeCursor();
 
-        $requete = $bdd->prepare("SELECT idTopic WHERE contenuTopic = :contenuCommentaire AND dateCommentaire = :dateCommentaire");
-        $requete->bindParam(':contenuCommentaire', $_POST["contenuTopic"]);
-        $requete->bindParam(':dateCommentaire', $date);
-        $resultats=$bdd->query($requete);
-        $idTopic=$resultats->fetch();
-        $resultats->closeCursor();
+    // insérer les images
+    $envoi = false;
+    if(isset($_FILES['image']) AND $_FILES['image']['error'] == 0){
+      if($_FILES['image']['size'] <= 100000){
+        $infosfichier = pathinfo($_FILES['image']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
 
-        if(!empty($_POST['tags']))
+        if(in_array($extension_upload, $extensions_autorisees)){
+          $url = time().''.$_FILES['image']['name'];
+          move_uploaded_file($_FILES['image']['tmp_name'], 'img/recettes/' . basename($url));
+
+          $envoi = true;
+
+          $requete = $bdd->prepare("INSERT INTO tag (photoUser) VALUES (:photoUSer)");
+          $requete->bindParam(':photoUser', $url);
+          $requete->execute();
+        }
+      }
+    }
+
+    // insérer les tags
+    if(!empty($_POST['tags']))
+    {
+      $tagsInit = explode('',$_POST['tags']);
+      $tagsEntres = array_unique($tagsInit);
+
+      foreach($tagsEntres as $newTag)
+      {
+        $existant = false;
+        $increment = 0;
+        do
         {
-          $tagsInit = explod('',$_POST['tags']);
-          $tagsEntres = array_unique($tagsInit);
-
-          foreach($tagsEntres as $newTag)
+          if($tagsEntres == tags[$increment]->nomTag)
           {
-            $existant = false;
-            $increment = 0;
-            do
-            {
-              if($tagsEntres == tags[$increment]->nomTag)
-              {
-                $existant = true;
-                $idTag = tags[$increment]->idTag;
-              }
-              $increment++;
-            }
-            while (!$existant || $increment < count($tags));
-            
-            if(!$existant)
-            {
-              $requete = $bdd->prepare("INSERT INTO tag (nomTag) VALUES (:nomTag)");
-              $requete->bindParam(':nomTag', $newTag);
-              $requete->execute();
-
-              $requete='SELECT idTag FROM tag WHERE nomTag = "$newTag"';
-              $resultats=$bdd->query($requete);
-              $valIdTag=$resultats->fetch();
-              $resultats->closeCursor();
-
-              $idTag = $valIdTag[0];
-            }
-
-            $requete = $bdd->prepare("INSERT INTO reference (idTag, idTopic) VALUES (:idTag, :idTopic)");
-            $requete->bindParam(':idTag', $idTag);
-            $requete->bindParam(':idTopic', $idTopic[0]);
-            $requete->execute();
+            $existant = true;
+            $idTag = tags[$increment]->idTag;
           }
+          $increment++;
+        }
+        while (!$existant || $increment < count($tags));
+
+        if(!$existant)
+        {
+          $requete = $bdd->prepare("INSERT INTO tag (nomTag) VALUES (:nomTag)");
+          $requete->bindParam(':nomTag', $newTag);
+          $requete->execute();
+
+          $requete="SELECT idTag FROM tag WHERE nomTag = '".$newTag."'";
+          $resultats=$bdd->query($requete);
+          $valIdTag=$resultats->fetch();
+          $resultats->closeCursor();
+
+          $idTag = $valIdTag[0];
         }
 
-      break;
+        $requete = $bdd->prepare("INSERT INTO reference (idTag, idTopic) VALUES (:idTag, :idTopic)");
+        $requete->bindParam(':idTag', $idTag);
+        $requete->bindParam(':idTopic', $idTopic[0]);
+        $requete->execute();
+      }
+    }
+  }
 
-    case 'edit':
+  if(isset($_POST['update']))
+  {
 
-      break;
+  }
 
-    case 'delete':
+  if(isset($_POST['delete']))
+  {
 
-      break;
   }
 
 ?>
