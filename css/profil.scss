@@ -1,15 +1,46 @@
 $c-yellow:#fbc531;
+$c-grey:#303030;
 
-body{
+.c-yellow{
+    color: $c-yellow;
+}
+.c-grey{
+    color: $c-grey;
+}
+body,html{
     margin: 0;
+    padding: 0;
 }
 *{
     font-family:  Helvetica, sans-serif;
     box-sizing: border-box;
 }
-em{
+.subBtn{
+    color: #4989ff;
+    background-color: #eee;
+    width: 80%;
+    max-width: 18em;
+    margin: 0 auto;
+    padding: 0.5em;
+    text-align: center;
+    border-bottom-left-radius: 2em 50%;
+    border-bottom-right-radius: 2em 50%;
+    border-top-left-radius: 2em 50%;
+    border-top-right-radius: 2em 50%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,40%);
+    box-shadow: 0px 3px 3px #ddd;
+}
+
+.highLight{
     font-style: normal;
     color: $c-yellow;
+}
+.tagPpl{
+    font-style: normal;
+    color: #4989ff;
 }
 nav{
     z-index: 100;
@@ -50,13 +81,20 @@ nav{
 }
 .btn-Icone{
     background-color: transparent;
-    color: #303030;
+    color: $c-grey;
     border: none;
     line-height: 1;
     font-size: 1.5em;
     &.active{
         color: $c-yellow;
     }
+}
+.btn-suivre{
+    color: #4989ff;
+    border: solid thin #4989ff;
+    border-radius: 2em;
+    padding: 0.1em 2em;
+    background-color: transparent;
 }
 .content{
     margin: 1em;
@@ -66,8 +104,11 @@ nav{
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas: 
     "ban ban ban ban"
-    "Pro Flu Flu Not";
+    "Pro Flu Flu other";
+    justify-content: start;
+    align-content: start;
     grid-gap: 20px;
+    grid-auto-flow: dense;
     .banniere{
         height: 300px;
         object-fit: cover;
@@ -77,30 +118,29 @@ nav{
     }
     .profil{
         border-radius: 0.5em;
-        background-color: $c-yellow;
+        background-color: transparent;
         position: relative;
-        padding-top:200px;
-        height: 300px;
-        box-shadow: 1px 2px 4px #d0d0d0;
-        .profilPict{
-            height: 200px;
-            width: 200px;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%,-50%);
+        grid-area: Pro;
+        .profilPictContainer{
+            background-color: $c-yellow;
+            text-align: center;
+            .profilPict{
+                margin: 0 auto;
+                height: 200px;
+                width: 200px;
+                border-radius: 50%;
+                transform: translate(0%,-50%);
+            }
         }
         .contentProfil{
             position: relative;
             background-color: #eee;
-            height: 12.5em;
             border-bottom-left-radius: 0.5em;
             border-bottom-right-radius: 0.5em;
             box-shadow: 1px 2px 4px #d0d0d0;
             .descProfil{
                 position: relative;
-                top: -4em;
+                top: -2em;
                 border-radius: 0.5em;
                 width: 90%;
                 margin: 0 auto;
@@ -121,28 +161,18 @@ nav{
                     }
                 }
             }
-            .subBtn{
-                color: #4989ff;
-                background-color: #eee;
-                width: 80%;
-                margin: 0 auto;
-                padding: 0.5em;
-                text-align: center;
-                border-bottom-left-radius: 2em 50%;
-                border-bottom-right-radius: 2em 50%;
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translate(-50%,40%);
-                box-shadow: 0px 3px 3px #ddd;
-            }
+            
         }
     }
     .flux{
         grid-area: Flu;
-        border-radius: 0.5em;
         position: relative;
         .article{
+            margin-bottom: 2em;
+            border-radius: 0.5em;
+            background-color: #eee;
+            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            position: relative;
             .author{
                 padding: 1em;
                 .authorPict{
@@ -164,7 +194,8 @@ nav{
                 text-align: justify;
             }
             .contentPict{
-                max-height: 500px;
+                overflow: hidden;
+                height: 90vh;
                 width: 100%;
                 img{
                     width: 100%;
@@ -174,17 +205,125 @@ nav{
             }
             .contentDetails{
                 padding: 1em;
+                padding-bottom: 2em;
+                position: relative;
+                .subBtn{
+                    color: $c-grey;
+                    box-shadow: 0px 3px 3px #ccc;
+                    display: flex;
+                    justify-content: space-evenly;
+                }
             }
             .contentcomm{
+                padding: 2em 1em;
                 background-color: #ddd;
                 ul{
                     li{
                         list-style-type: none;
                         padding-bottom: 0.5em;
-                        em{
-                            color: #4989ff;
-                        }
                     }
+                }
+                .subBtn{
+                    background-color: #ddd;
+                    box-shadow: 0px 3px 3px #ccc;
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+            }
+        }
+    }
+    .other{
+        grid-area: other;
+        position: relative;
+        text-align: center;
+        .suggest{
+            text-align:left;
+            background-color: #eee;
+            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            padding: 0.5em;
+            padding-bottom: 1.5em;
+            position: relative;
+            margin-bottom: 2em;
+            .blcPpl{
+                padding: 0.5em;
+                padding-bottom: 1em;
+                background-color: #fff;
+                border-radius: 0.5em;
+                margin-bottom: 0.8em;
+                box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+                position: relative;
+                .blcPplPict{
+                    border-radius: 50%;
+                    height: 4em;
+                    width: 4em;
+                    float: left;
+                    margin-right: 0.5em;
+                }
+                p{
+                    margin-bottom: 0.5em;
+                    margin-top: 0.5em;
+                    .highLight{
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+        .message{
+            text-align:left;
+            background-color: #eee;
+            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            padding: 0.5em;
+            padding-bottom: 1.5em;
+            position: relative;
+            margin-bottom: 2em;
+            .blcMess{
+                padding: 0.5em;
+                padding-bottom: 1em;
+                background-color: #fff;
+                border-radius: 0.5em;
+                margin-bottom: 0.8em;
+                box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+                position: relative;
+                .blcMessPict{
+                    border-radius: 50%;
+                    height: 4em;
+                    width: 4em;
+                    float: left;
+                    margin-right: 0.5em;
+                }
+                p{
+                    margin-bottom: 0.5em;
+                    margin-top: 0.5em;
+                    .highLight{
+                        float: right;
+                        font-size: 0.8em;
+                    }
+                }
+                .extraitMess{
+                    margin-top: 1.2em;
+                    margin-bottom: 0.2em;
+                    font-size: 0.8em;
+                }
+            }
+            form{
+                position: relative;
+                input{
+                    background-color: transparent;
+                    padding: 0.5em;
+                    border-radius: 2em;
+                    border: thin solid #fff;
+                    margin: 0 auto;
+                    width: 100%;
+                }
+                button{
+                    position: absolute;
+                    background-color: #fff;
+                    border-radius: 2em;
+                    width: 2em;
+                    height: 2em;
+                    border: none;
+                    top: 0.15em;
+                    right: 0.2em;
                 }
             }
         }

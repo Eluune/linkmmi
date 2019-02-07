@@ -1,5 +1,14 @@
-body {
+.c-yellow {
+  color: #fbc531;
+}
+
+.c-grey {
+  color: #303030;
+}
+
+body, html {
   margin: 0;
+  padding: 0;
 }
 
 * {
@@ -8,9 +17,35 @@ body {
           box-sizing: border-box;
 }
 
-em {
+.subBtn {
+  color: #4989ff;
+  background-color: #eee;
+  width: 80%;
+  max-width: 18em;
+  margin: 0 auto;
+  padding: 0.5em;
+  text-align: center;
+  border-bottom-left-radius: 2em 50%;
+  border-bottom-right-radius: 2em 50%;
+  border-top-left-radius: 2em 50%;
+  border-top-right-radius: 2em 50%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, 40%);
+          transform: translate(-50%, 40%);
+  -webkit-box-shadow: 0px 3px 3px #ddd;
+          box-shadow: 0px 3px 3px #ddd;
+}
+
+.highLight {
   font-style: normal;
   color: #fbc531;
+}
+
+.tagPpl {
+  font-style: normal;
+  color: #4989ff;
 }
 
 nav {
@@ -74,6 +109,14 @@ nav .blcNav form input {
   color: #fbc531;
 }
 
+.btn-suivre {
+  color: #4989ff;
+  border: solid thin #4989ff;
+  border-radius: 2em;
+  padding: 0.1em 2em;
+  background-color: transparent;
+}
+
 .content {
   margin: 1em;
   margin-top: 4em;
@@ -82,8 +125,14 @@ nav .blcNav form input {
   display: grid;
   -ms-grid-columns: 1fr 1fr 1fr 1fr;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-template-areas: "ban ban ban ban" "Pro Flu Flu Not";
+      grid-template-areas: "ban ban ban ban" "Pro Flu Flu other";
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  -ms-flex-line-pack: start;
+      align-content: start;
   grid-gap: 20px;
+  grid-auto-flow: dense;
 }
 
 .content .banniere {
@@ -100,29 +149,30 @@ nav .blcNav form input {
 
 .content .profil {
   border-radius: 0.5em;
-  background-color: #fbc531;
+  background-color: transparent;
   position: relative;
-  padding-top: 200px;
-  height: 300px;
-  -webkit-box-shadow: 1px 2px 4px #d0d0d0;
-          box-shadow: 1px 2px 4px #d0d0d0;
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  grid-area: Pro;
 }
 
-.content .profil .profilPict {
+.content .profil .profilPictContainer {
+  background-color: #fbc531;
+  text-align: center;
+}
+
+.content .profil .profilPictContainer .profilPict {
+  margin: 0 auto;
   height: 200px;
   width: 200px;
   border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  -webkit-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
 }
 
 .content .profil .contentProfil {
   position: relative;
   background-color: #eee;
-  height: 12.5em;
   border-bottom-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
   -webkit-box-shadow: 1px 2px 4px #d0d0d0;
@@ -131,7 +181,7 @@ nav .blcNav form input {
 
 .content .profil .contentProfil .descProfil {
   position: relative;
-  top: -4em;
+  top: -2em;
   border-radius: 0.5em;
   width: 90%;
   margin: 0 auto;
@@ -157,30 +207,20 @@ nav .blcNav form input {
   font-size: 2em;
 }
 
-.content .profil .contentProfil .subBtn {
-  color: #4989ff;
-  background-color: #eee;
-  width: 80%;
-  margin: 0 auto;
-  padding: 0.5em;
-  text-align: center;
-  border-bottom-left-radius: 2em 50%;
-  border-bottom-right-radius: 2em 50%;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  -webkit-transform: translate(-50%, 40%);
-          transform: translate(-50%, 40%);
-  -webkit-box-shadow: 0px 3px 3px #ddd;
-          box-shadow: 0px 3px 3px #ddd;
-}
-
 .content .flux {
   -ms-grid-row: 2;
   -ms-grid-column: 2;
   -ms-grid-column-span: 2;
   grid-area: Flu;
+  position: relative;
+}
+
+.content .flux .article {
+  margin-bottom: 2em;
   border-radius: 0.5em;
+  background-color: #eee;
+  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   position: relative;
 }
 
@@ -210,7 +250,8 @@ nav .blcNav form input {
 }
 
 .content .flux .article .contentPict {
-  max-height: 500px;
+  overflow: hidden;
+  height: 90vh;
   width: 100%;
 }
 
@@ -223,9 +264,24 @@ nav .blcNav form input {
 
 .content .flux .article .contentDetails {
   padding: 1em;
+  padding-bottom: 2em;
+  position: relative;
+}
+
+.content .flux .article .contentDetails .subBtn {
+  color: #303030;
+  -webkit-box-shadow: 0px 3px 3px #ccc;
+          box-shadow: 0px 3px 3px #ccc;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
 
 .content .flux .article .contentcomm {
+  padding: 2em 1em;
   background-color: #ddd;
 }
 
@@ -234,7 +290,132 @@ nav .blcNav form input {
   padding-bottom: 0.5em;
 }
 
-.content .flux .article .contentcomm ul li em {
-  color: #4989ff;
+.content .flux .article .contentcomm .subBtn {
+  background-color: #ddd;
+  -webkit-box-shadow: 0px 3px 3px #ccc;
+          box-shadow: 0px 3px 3px #ccc;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.content .other {
+  -ms-grid-row: 2;
+  -ms-grid-column: 4;
+  grid-area: other;
+  position: relative;
+  text-align: center;
+}
+
+.content .other .suggest {
+  text-align: left;
+  background-color: #eee;
+  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+  padding: 0.5em;
+  padding-bottom: 1.5em;
+  position: relative;
+  margin-bottom: 2em;
+}
+
+.content .other .suggest .blcPpl {
+  padding: 0.5em;
+  padding-bottom: 1em;
+  background-color: #fff;
+  border-radius: 0.5em;
+  margin-bottom: 0.8em;
+  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+  position: relative;
+}
+
+.content .other .suggest .blcPpl .blcPplPict {
+  border-radius: 50%;
+  height: 4em;
+  width: 4em;
+  float: left;
+  margin-right: 0.5em;
+}
+
+.content .other .suggest .blcPpl p {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.content .other .suggest .blcPpl p .highLight {
+  font-size: 0.8em;
+}
+
+.content .other .message {
+  text-align: left;
+  background-color: #eee;
+  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+  padding: 0.5em;
+  padding-bottom: 1.5em;
+  position: relative;
+  margin-bottom: 2em;
+}
+
+.content .other .message .blcMess {
+  padding: 0.5em;
+  padding-bottom: 1em;
+  background-color: #fff;
+  border-radius: 0.5em;
+  margin-bottom: 0.8em;
+  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+  position: relative;
+}
+
+.content .other .message .blcMess .blcMessPict {
+  border-radius: 50%;
+  height: 4em;
+  width: 4em;
+  float: left;
+  margin-right: 0.5em;
+}
+
+.content .other .message .blcMess p {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.content .other .message .blcMess p .highLight {
+  float: right;
+  font-size: 0.8em;
+}
+
+.content .other .message .blcMess .extraitMess {
+  margin-top: 1.2em;
+  margin-bottom: 0.2em;
+  font-size: 0.8em;
+}
+
+.content .other .message form {
+  position: relative;
+}
+
+.content .other .message form input {
+  background-color: transparent;
+  padding: 0.5em;
+  border-radius: 2em;
+  border: thin solid #fff;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content .other .message form button {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 2em;
+  width: 2em;
+  height: 2em;
+  border: none;
+  top: 0.15em;
+  right: 0.2em;
 }
 /*# sourceMappingURL=profil.css.map */
