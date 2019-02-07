@@ -1,56 +1,54 @@
 <?php
 
-  if(!isset($_POST["recherche"]))
+  $requete='SELECT nomTag FROM tag WHERE nomTag LIKE '.$_POST["recherche"];
+  $resultats=$bdd->query($requete);
+  $tags=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $resultats->closeCursor();
+
+  $requete='SELECT idUser FROM utilisateur WHERE idUser LIKE '.$_POST["recherche"];
+  $resultats=$bdd->query($requete);
+  $users=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $resultats->closeCursor();
+
+  if(isset($_POST["recherche"]))
   {
-    if(strpos($_POST["@"]))
+    if(!empty($_POST["recherche"]))
     {
-      $requete='SELECT idUser FROM utilisateur';
-      $resultats=$bdd->query($requete);
-      $utilisateurs=$resultats->fetchAll(PDO::FETCH_OBJ);
-      $resultats->closeCursor();
 
-      $i = 0;
-      $continue = true;
-      $autocomplete = array();
-
-      do
+      if(stristr($_POST["recherche"], "@"))
       {
-        if(stristr($_POST["recherche"], $utilisateurs[$i]->idUser))
+        for($i = 0 ; $i < count($tags) ; $i++)
         {
-          array_push($utilisateurs[$i]->idUser);
+          if(stristr($tags[$i], $_POST["recherche"])) { echo($tags[$i]." "); }
         }
-
-        $i++;
-      } while($continue || $index < count($utilisateurs));
-    }
-
-    else if(strpos($_POST["#"]))
-    {
-      $requete='SELECT nomTag FROM tag';
-      $resultats=$bdd->query($requete);
-      $tags=$resultats->fetchAll(PDO::FETCH_OBJ);
-      $resultats->closeCursor();
-
-      $i = 0;
-      $continue = true;
-      $autocomplete = array();
-
-      do
+      }
+      else if(stristr($_POST["recherche"], "#"))
       {
-        if(stristr($_POST["recherche"], $tags[$i]->nomTag))
+        for($i = 0 ; $i < count($users) ; $i++)
         {
-          array_push($tags[$i]->nomTag);
+          if(stristr($users[$i], $_POST["recherche"])) { echo($users[$i]." "); }
         }
-
-        $i++;
-      } while($continue || $index < count($tags));
+      }
+      else
+      {
+        for($i = 0 ; $i < count($tags) ; $i++)
+        {
+          if(stristr($tags[$i], $_POST["recherche"])) { echo($tags[$i]." "); }
+        }
+        for($i = 0 ; $i < count($users) ; $i++)
+        {
+          if(stristr($users[$i], $_POST["recherche"])) { echo($users[$i]." "); }
+        }
+      }
     }
-
     else
     {
-      
+      echo("");
     }
   }
+  else
+  {
+    echo("");
+  }
 
-  echo($autocomplete);
 ?>
