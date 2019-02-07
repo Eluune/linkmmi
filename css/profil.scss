@@ -1,22 +1,28 @@
-$c-yellow:#fbc531;
-$c-grey:#303030;
-
+$grey : #f1f1f1;
+$yellow : #fbc531;
+$blue : #62cccf;
+$black : #4A4A4A;
+$border-grey : #d5d5d5;
+%shadow {
+    box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
+}
 .c-yellow{
-    color: $c-yellow;
+    color: $yellow;
 }
 .c-grey{
-    color: $c-grey;
+    color: $black;
 }
 body,html{
     margin: 0;
     padding: 0;
+    color: $black;
 }
 *{
     font-family:  Helvetica, sans-serif;
     box-sizing: border-box;
 }
 .subBtn{
-    color: #4989ff;
+    color: $blue;
     background-color: #eee;
     width: 80%;
     max-width: 18em;
@@ -31,16 +37,16 @@ body,html{
     bottom: 0;
     left: 50%;
     transform: translate(-50%,40%);
-    box-shadow: 0px 3px 3px #ddd;
+    @extend %shadow;
 }
 
 .highLight{
     font-style: normal;
-    color: $c-yellow;
+    color: $yellow;
 }
 .tagPpl{
     font-style: normal;
-    color: #4989ff;
+    color: $blue;
 }
 nav{
     z-index: 100;
@@ -52,7 +58,7 @@ nav{
     justify-content: space-between;
     border-bottom: thin solid lightgrey;
     padding: 0.5em;
-    box-shadow: 0px 1px 3px grey;
+    @extend %shadow;
     margin: 0;
     width: 100%;
     background-color: #fff;
@@ -74,24 +80,24 @@ nav{
 }
 .btn-Y-R{
     color: white;
-    background-color: $c-yellow;
+    background-color: $yellow;
     border: none;
     padding: 0.5em;
     border-radius: 2em;
 }
 .btn-Icone{
     background-color: transparent;
-    color: $c-grey;
+    color: $black;
     border: none;
     line-height: 1;
     font-size: 1.5em;
     &.active{
-        color: $c-yellow;
+        color: $yellow;
     }
 }
 .btn-suivre{
-    color: #4989ff;
-    border: solid thin #4989ff;
+    color: $blue;
+    border: solid thin $blue;
     border-radius: 2em;
     padding: 0.1em 2em;
     background-color: transparent;
@@ -122,8 +128,10 @@ nav{
         position: relative;
         grid-area: Pro;
         .profilPictContainer{
-            background-color: $c-yellow;
+            background-color: $yellow;
             text-align: center;
+            border-top-left-radius: 0.5em;
+            border-top-right-radius: 0.5em;
             .profilPict{
                 margin: 0 auto;
                 height: 200px;
@@ -137,7 +145,7 @@ nav{
             background-color: #eee;
             border-bottom-left-radius: 0.5em;
             border-bottom-right-radius: 0.5em;
-            box-shadow: 1px 2px 4px #d0d0d0;
+            @extend %shadow;
             .descProfil{
                 position: relative;
                 top: -2em;
@@ -146,7 +154,7 @@ nav{
                 margin: 0 auto;
                 padding: 0.5em;
                 background-color: #fff;
-                box-shadow: 1px 2px 4px gray;
+                @extend %shadow;
                 em{
                     font-size: 0.7em;
                 }
@@ -171,7 +179,7 @@ nav{
             margin-bottom: 2em;
             border-radius: 0.5em;
             background-color: #eee;
-            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            @extend %shadow;
             position: relative;
             .author{
                 padding: 1em;
@@ -208,8 +216,8 @@ nav{
                 padding-bottom: 2em;
                 position: relative;
                 .subBtn{
-                    color: $c-grey;
-                    box-shadow: 0px 3px 3px #ccc;
+                    color: $black;
+                    @extend %shadow;
                     display: flex;
                     justify-content: space-evenly;
                 }
@@ -225,7 +233,7 @@ nav{
                 }
                 .subBtn{
                     background-color: #ddd;
-                    box-shadow: 0px 3px 3px #ccc;
+                    @extend %shadow;
                     display: flex;
                     justify-content: space-evenly;
                 }
@@ -239,7 +247,7 @@ nav{
         .suggest{
             text-align:left;
             background-color: #eee;
-            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            @extend %shadow;
             padding: 0.5em;
             padding-bottom: 1.5em;
             position: relative;
@@ -250,7 +258,7 @@ nav{
                 background-color: #fff;
                 border-radius: 0.5em;
                 margin-bottom: 0.8em;
-                box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+                @extend %shadow;
                 position: relative;
                 .blcPplPict{
                     border-radius: 50%;
@@ -271,7 +279,7 @@ nav{
         .message{
             text-align:left;
             background-color: #eee;
-            box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+            @extend %shadow;
             padding: 0.5em;
             padding-bottom: 1.5em;
             position: relative;
@@ -282,7 +290,7 @@ nav{
                 background-color: #fff;
                 border-radius: 0.5em;
                 margin-bottom: 0.8em;
-                box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
+                @extend %shadow;
                 position: relative;
                 .blcMessPict{
                     border-radius: 50%;

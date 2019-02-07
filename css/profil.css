@@ -1,14 +1,20 @@
+.subBtn, nav, .content .profil .contentProfil, .content .profil .contentProfil .descProfil, .content .flux .article, .content .flux .article .contentDetails .subBtn, .content .flux .article .contentcomm .subBtn, .content .other .suggest, .content .other .suggest .blcPpl, .content .other .message, .content .other .message .blcMess {
+  -webkit-box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
+          box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
+}
+
 .c-yellow {
   color: #fbc531;
 }
 
 .c-grey {
-  color: #303030;
+  color: #4A4A4A;
 }
 
 body, html {
   margin: 0;
   padding: 0;
+  color: #4A4A4A;
 }
 
 * {
@@ -18,7 +24,7 @@ body, html {
 }
 
 .subBtn {
-  color: #4989ff;
+  color: #62cccf;
   background-color: #eee;
   width: 80%;
   max-width: 18em;
@@ -34,8 +40,6 @@ body, html {
   left: 50%;
   -webkit-transform: translate(-50%, 40%);
           transform: translate(-50%, 40%);
-  -webkit-box-shadow: 0px 3px 3px #ddd;
-          box-shadow: 0px 3px 3px #ddd;
 }
 
 .highLight {
@@ -45,7 +49,7 @@ body, html {
 
 .tagPpl {
   font-style: normal;
-  color: #4989ff;
+  color: #62cccf;
 }
 
 nav {
@@ -66,8 +70,6 @@ nav {
           justify-content: space-between;
   border-bottom: thin solid lightgrey;
   padding: 0.5em;
-  -webkit-box-shadow: 0px 1px 3px grey;
-          box-shadow: 0px 1px 3px grey;
   margin: 0;
   width: 100%;
   background-color: #fff;
@@ -99,7 +101,7 @@ nav .blcNav form input {
 
 .btn-Icone {
   background-color: transparent;
-  color: #303030;
+  color: #4A4A4A;
   border: none;
   line-height: 1;
   font-size: 1.5em;
@@ -110,8 +112,8 @@ nav .blcNav form input {
 }
 
 .btn-suivre {
-  color: #4989ff;
-  border: solid thin #4989ff;
+  color: #62cccf;
+  border: solid thin #62cccf;
   border-radius: 2em;
   padding: 0.1em 2em;
   background-color: transparent;
@@ -159,6 +161,8 @@ nav .blcNav form input {
 .content .profil .profilPictContainer {
   background-color: #fbc531;
   text-align: center;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
 }
 
 .content .profil .profilPictContainer .profilPict {
@@ -175,8 +179,6 @@ nav .blcNav form input {
   background-color: #eee;
   border-bottom-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
-  -webkit-box-shadow: 1px 2px 4px #d0d0d0;
-          box-shadow: 1px 2px 4px #d0d0d0;
 }
 
 .content .profil .contentProfil .descProfil {
@@ -187,8 +189,6 @@ nav .blcNav form input {
   margin: 0 auto;
   padding: 0.5em;
   background-color: #fff;
-  -webkit-box-shadow: 1px 2px 4px gray;
-          box-shadow: 1px 2px 4px gray;
 }
 
 .content .profil .contentProfil .descProfil em {
@@ -219,8 +219,6 @@ nav .blcNav form input {
   margin-bottom: 2em;
   border-radius: 0.5em;
   background-color: #eee;
-  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
-          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   position: relative;
 }
 
@@ -269,9 +267,7 @@ nav .blcNav form input {
 }
 
 .content .flux .article .contentDetails .subBtn {
-  color: #303030;
-  -webkit-box-shadow: 0px 3px 3px #ccc;
-          box-shadow: 0px 3px 3px #ccc;
+  color: #4A4A4A;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -292,8 +288,6 @@ nav .blcNav form input {
 
 .content .flux .article .contentcomm .subBtn {
   background-color: #ddd;
-  -webkit-box-shadow: 0px 3px 3px #ccc;
-          box-shadow: 0px 3px 3px #ccc;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -313,8 +307,6 @@ nav .blcNav form input {
 .content .other .suggest {
   text-align: left;
   background-color: #eee;
-  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
-          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   padding: 0.5em;
   padding-bottom: 1.5em;
   position: relative;
@@ -327,8 +319,6 @@ nav .blcNav form input {
   background-color: #fff;
   border-radius: 0.5em;
   margin-bottom: 0.8em;
-  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
-          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   position: relative;
 }
 
@@ -352,8 +342,6 @@ nav .blcNav form input {
 .content .other .message {
   text-align: left;
   background-color: #eee;
-  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
-          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   padding: 0.5em;
   padding-bottom: 1.5em;
   position: relative;
@@ -366,8 +354,6 @@ nav .blcNav form input {
   background-color: #fff;
   border-radius: 0.5em;
   margin-bottom: 0.8em;
-  -webkit-box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
-          box-shadow: 1px 1px 4px #d0d0d0, -1px -1px 4px #d0d0d0;
   position: relative;
 }
 
