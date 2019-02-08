@@ -60,7 +60,6 @@ html,body
 
   .section-left {
     grid: "l";
-    position: sticky;
 
     .connexion {
       width: 100%;
@@ -152,9 +151,9 @@ html,body
 
   }
 
-  // ::-webkit-scrollbar {
-  //   display: none;
-  // }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   .section-center {
     grid: "c";
@@ -371,7 +370,6 @@ html,body
 
   .section-right {
     grid: "r";
-    position: sticky;
 
     .message-accueil {
       width: 100%;
@@ -410,6 +408,7 @@ html,body
     }
   }
 }
+
 .popupInscript {
   display: none;
   position: fixed;

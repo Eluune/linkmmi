@@ -14,7 +14,7 @@
 
   <!-- Links -->
   <link rel="stylesheet" href="css/style.min.css">
-  <link rel="stylesheet" href="css/style.css">
+
   <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 
