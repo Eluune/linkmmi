@@ -14,8 +14,8 @@ $border-darkgrey : rgba(150, 150, 150, 1);
   z-index: 100;
 }
 
-html,
-body {
+html,body
+{
   width: 100%;
   height: 100%;
   font-family: helvetica;
@@ -29,13 +29,13 @@ body {
 }
 
 %shadow {
-  box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 6px 10px -5px rgba(0,0,0,0.15);
 }
 
 %style-bottom {
-  content: "";
+  content : "";
   width: 60%;
-  height: 10%;
+  height:10%;
   background-color: red;
   position: absolute;
   bottom: 0;
@@ -61,6 +61,7 @@ body {
   .section-left {
     grid: "l";
 
+
     .connexion {
       width: 100%;
       height: 45%;
@@ -75,7 +76,7 @@ body {
       }
 
       &:before {
-        content: "";
+        content : "";
         position: absolute;
         width: 100%;
         height: 50%;
@@ -144,8 +145,11 @@ body {
           font-weight: lighter;
           font-size: 1vw;
         }
+
       }
+
     }
+
   }
 
   ::-webkit-scrollbar {
@@ -169,13 +173,14 @@ body {
       padding-bottom: 4%;
       box-sizing: border-box;
       z-index: 999;
-      margin-bottom: 40px;
+      margin-bottom: 6vh;
 
       &:after {
         @extend %style-bottom;
       }
 
       .utilisateur {
+
         margin-left: 4%;
 
         .photo-utilisateur {
@@ -195,6 +200,7 @@ body {
         }
 
         .info-utilisateur {
+
           transform: translate(20px, 5px);
 
           h2 {
@@ -208,7 +214,9 @@ body {
             font-size: .8vw;
             font-weight: lighter;
           }
+
         }
+
       }
 
       .content-actualité {
@@ -254,6 +262,12 @@ body {
         bottom: -5%;
         transform: translate(-50%, -50%);
         font-size: 2vw;
+        transition: .5s;
+
+        &:hover, .like-active {
+          color: $blue;
+          transition: .5s;
+        }
       }
 
       .nb-like {
@@ -280,7 +294,6 @@ body {
         font-size: 1.2vw;
       }
     }
-  }
 
     .section-comments {
       width: calc(100% - 20px);
@@ -289,7 +302,7 @@ body {
       position: relative;
       top: -10px;
       left: 50%;
-      transform: translate(-50%, -40px);
+      transform: translate(-50%, -6vh);
       padding-top: 8%;
       padding-left: 4%;
       padding-right: 4%;
@@ -357,67 +370,7 @@ body {
       }
     }
   }
-}
 
-.popupInscript {
-  display: none;
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  background-color: #00000099;
-  top: 0;
-  left: 0;
-  box-sizing: border-box;
-  overflow-y: scroll;
-  &.active{
-    display: block;
-  }
-  .contentPopup {
-    background-color: #fff;
-    width: 80%;
-    margin: 10vh auto;
-    padding: 2em;
-    position: relative;
-    .closeInscript{
-      position: absolute;
-      top: 1em;
-      right: 1em;
-      border: none;
-      background-color: transparent;
-      font-size: 2em;
-      color: $black;
-      transition:0.2s;
-      border-radius: 50%;
-      line-height: 1;
-      padding: 0;
-      &:hover{
-        color: $yellow;
-      }
-    }
-    h2 {
-      color: $yellow;
-      text-align: center;
-    }
-    form {
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-      label{
-        display: block;
-        font-size: 1.5em;
-        margin: 1em;
-        input{
-          font-size: 0.9em;
-          border:none;
-          border-bottom: solid 2px $black;
-          color: $black;
-        }
-      }
-      button{
-        font-size: 1.5em;
-        padding: 0.5em;
-        border:none;
-        background-color: $yellow;
   .section-right {
     grid: "r";
 
@@ -456,30 +409,5 @@ body {
         }
       }
     }
-  }
-}
-
-
-.animUnderline{
-  position: relative;
-  &.Blue{
-    &::before{
-      background-color: $blue;
-    }
-  }
-  &::before{
-    transition:0.5s;
-    content:"";
-    width: 0%;
-    height: 1px;
-    background-color: $yellow;
-    top: 102%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    display: block;
-    position: absolute;
-  }
-  &:hover::before{
-    width: 80%;
   }
 }
