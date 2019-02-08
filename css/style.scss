@@ -60,6 +60,7 @@ html,body
 
   .section-left {
     grid: "l";
+    position: sticky;
 
     .connexion {
       width: 100%;
@@ -151,14 +152,12 @@ html,body
 
   }
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  // ::-webkit-scrollbar {
+  //   display: none;
+  // }
 
   .section-center {
     grid: "c";
-    overflow-y: auto;
-    overflow-x: hidden;
 
     .actualitées {
       width: calc(100% - 20px);
@@ -372,6 +371,7 @@ html,body
 
   .section-right {
     grid: "r";
+    position: sticky;
 
     .message-accueil {
       width: 100%;
