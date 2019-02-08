@@ -41,9 +41,9 @@ PRIMARY KEY (idCommentaire)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS topic ;
 CREATE TABLE topic (idTopic BIGINT(8) AUTO_INCREMENT NOT NULL,
-nomTopic CHAR(120),
-imgTopic_topic CHAR(100),
-dateTopic_topic DATETIME,
+imgTopic CHAR(100),
+contenuTopic TEXT,
+dateTopic DATETIME,
 idUser BIGINT(8),
 PRIMARY KEY (idTopic)) ENGINE=InnoDB;
 
@@ -51,6 +51,8 @@ DROP TABLE IF EXISTS tag ;
 CREATE TABLE tag (idTag BIGINT(8) AUTO_INCREMENT NOT NULL,
 nomTag CHAR(100),
 PRIMARY KEY (idTag)) ENGINE=InnoDB;
+
+INSERT INTO tag VALUES (1, 'mmi');
 
 DROP TABLE IF EXISTS rejoint ;
 CREATE TABLE rejoint (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,

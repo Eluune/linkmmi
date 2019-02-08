@@ -1,4 +1,13 @@
 <?php
+  /*
+  * connexion.php
+  * - récupère et compare les données fournies par l'utilisateur et la bdd
+  * - retourne une erreur en fonction du cas de figure :
+  *       - email éronné
+  *       - mot de passe éronné
+  * - crée une session en cas de réussite
+  */
+
   include("../bdd/config.php");
   include("../bdd/bdd.php");
 

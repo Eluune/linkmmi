@@ -1,4 +1,14 @@
 <?php
+  /*
+  * inscription.php
+  * - Récupère les données saisies par l'utilisateur et les stocks dans la bdd
+  *   - nom
+  *   - prenom
+  *   - password
+  *   - email
+  *   - id
+  */
+
 
   include("../bdd/config.php");
   include("../bdd/bdd.php");

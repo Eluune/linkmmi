@@ -70,11 +70,11 @@
         <i class="icofont-ui-love like"></i>
         <p class="nb-like">300</p>
 
-        <i class="icofont-speech-comments comments" data-number="<?php echo $i; ?>"></i>
+        <i class="icofont-speech-comments comments" data-number="<?php echo $i; ?>"></i> <!-- Remplaccer le $i par id-->
         <p class="nb-comments">200</p>
       </div> <!-- Fermeture .actualitées -->
 
-      <div class="section-comments" id="comments-<?php echo $i; ?>">
+      <div class="section-comments" id="comments-<?php echo $i; ?>"> <!-- Remplaccer le $i par id-->
 
         <div class="commentaire-users">
           <a href="#"> @Sarah_Crch </a>
