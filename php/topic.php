@@ -4,8 +4,25 @@
    * Créer un topic - Edit un topic - Supprimer un topic
   \* ------------------------------------------------------ */
 
+  /* DONNÉES À RÉCUPÉRER */
+  /* CREATE  /!\ Penser à mettre ça dans le formulaire : enctype="multipart/form-data"
+        Depuis formulaire methode = POST
+            contenuTopic
+            tagsTopic
+            imgTopic */
+  /* UPDATE  /!\ Penser à mettre ça dans le formulaire : enctype="multipart/form-data"
+        Depuis formulaire methode = POST
+            idTopic
+            contenuTopic
+            imgTopic /*
+  /* DELETE
+      Depuis l'url (Get)
+            idTopic */
+
   $date = date("Y-m-d H:i:s");
-  $idUser = $_SESSION['id'];
+  $idUser = $_SESSION['id']; // id utilisateur
+  $folder = './img/'; // lien du fichier qui reçoit l'image
+  $homePage = '../index.php'; //  lien de la page d'accueil
 
   include("../bdd/config.php");
   include("../bdd/bdd.php");
@@ -15,13 +32,8 @@
   $tags=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
 
-  if(isset($_POST['create'])) // /!\ Penser à mettre ça dans le formulaire : enctype="multipart/form-data"
+  if(isset($_POST['create']))
   {
-    // récupérer dans le formulaire :
-      // contenuTopic
-      // tagsTopic
-      // eventuellement imgTopic
-
     $requete = $bdd->prepare("INSERT INTO topic (contenuTopic, dateTopic, idUser) VALUES (:contenuTopic, :dateTopic, :idUser)");
     $requete->bindParam(':contenuTopic', $_POST["contenuTopic"]);
     $requete->bindParam(':dateTopic', $date);
@@ -36,25 +48,22 @@
     // insérer les images
     if($_FILES['imgTopic']['error'] == 0)
     {
-      if($_FILES['imgTopic']['size'] > 2000000)
+      if($_FILES['imgTopic']['size'] < 1000000)
       {
-          // réduire l'image
-      }
-      $infosfichier = pathinfo($_FILES['imgTopic']['name']);
-      $extension_upload = $infosfichier['extension'];
-      $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+        $infosfichier = pathinfo($_FILES['imgTopic']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
 
-      if(in_array($extension_upload, $extensions_autorisees))
-      {
-        $url = time().''.$_FILES['imgTopic']['name'];
-        move_uploaded_file($_FILES['imgTopic']['tmp_name'], 'img/'.basename($url));
+        if(in_array($extension_upload, $extensions_autorisees))
+        {
+          $url = time().''.$_FILES['imgTopic']['name'];
+          move_uploaded_file($_FILES['imgTopic']['tmp_name'], $folder.basename($url));
 
-        $envoi = true;
-
-        $requete = $bdd->prepare("UPDATE topic SET imgTopic = :imgTopic WHERE idTopic = :idTopic");
-        $requete->bindParam(':imgTopic', $url);
-        $requete->bindParam(':idTopic', $idTopic[0]);
-        $requete->execute();
+          $requete = $bdd->prepare("UPDATE topic SET imgTopic = :imgTopic WHERE idTopic = :idTopic");
+          $requete->bindParam(':imgTopic', $url);
+          $requete->bindParam(':idTopic', $idTopic[0]);
+          $requete->execute();
+        }
       }
     }
 
@@ -100,24 +109,62 @@
       }
     }
 
-    header('location: /');
+    header('location: '.$homePage);
     exit;
   }
   else if(isset($_POST['update']))
   {
+    $requete="SELECT contenuTopic, imgTopic FROM topic WHERE idTopic = ".$_GET['idTopic'];
+    $resultats=$bdd->query($requete);
+    $topicInit=$resultats->fetchAll(PDO::FETCH_OBJ);
+    $resultats->closeCursor();
     // si le contenu est modifié
+    if($topicInit[0]->contenuTopic != $_POST['contenuTopic'] &&)
+    {
+      $requete = $bdd->prepare("UPDATE topic SET contenuTopic = :contenuTopic, editTopic = :editTopic WHERE idTopic = :idTopic");
+      $requete->bindParam(':contenuTopic', $_POST['contenuTopic']);
+      $requete->bindParam(':editTopic', $date);
+      $requete->bindParam(':idTopic', $_POST['idTopic']);
+      $requete->execute();
+    }
 
-    // si l'image est modifiée ou ajoutée
+    // supprime l'image qui existait déjà puis ajoute la nouvelle image
+    if($topicInit[0]->imgTopic != 'NULL'){
+      unlink($folder.$topicInit[0]->imgTopic);
+    }
+    if($_FILES['imgTopic']['error'] == 0)
+    {
+      if($_FILES['imgTopic']['size'] < 1000000)
+      {
+        $infosfichier = pathinfo($_FILES['imgTopic']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+
+        if(in_array($extension_upload, $extensions_autorisees))
+        {
+          $url = time().''.$_FILES['imgTopic']['name'];
+          move_uploaded_file($_FILES['imgTopic']['tmp_name'], $folder.basename($url));
+
+          $requete = $bdd->prepare("UPDATE topic SET imgTopic = :imgTopic WHERE idTopic = :idTopic");
+          $requete->bindParam(':imgTopic', $url);
+          $requete->bindParam(':idTopic', $idTopic[0]);
+          $requete->execute();
+        }
+      }
+    }
+
+    header('location: '.$homePage);
+    exit;
   }
   else if(isset($_POST['delete']))
   {
-     // on récupère l'idUser du topic à supprimer
-    $requete="SELECT idUser FROM topic WHERE idTopic = ".$_GET['idTopic'];
+    // on récupère l'idUser du topic à supprimer
+    $requete="SELECT idUser, imgTopic FROM topic WHERE idTopic = ".$_GET['idTopic'];
     $resultats=$bdd->query($requete);
-    $idAuteur=$resultats->fetch();
+    $infosTopic=$resultats->fetchAll(PDO::FETCH_OBJ);
     $resultats->closeCursor();
-     // on vérifie que l'idUser récupèrée et celle de l'user courant
-    if($idAuteur[0] == $idUser)
+    // on vérifie que l'idUser récupèrée et celle de l'user courant
+    if($infosTopic[0]->idUser == $idUser)
     {
       $requete = $bdd->prepare("DELETE FROM commentaire WHERE idTopic = :idTopic");
       $requete->bindParam(':idTopic', $_GET['idTopic']);
@@ -130,18 +177,19 @@
       $requete = $bdd->prepare("DELETE FROM topic WHERE idTopic = :idTopic");
       $requete->bindParam(':idTopic', $_GET['idTopic']);
       $requete->execute();
+
+      if($infosTopic[0]->imgTopic != 'NULL'){
+        unlink($folder.$infosTopic[0]->imgTopic);
+      }
     }
     else
     {
-      // on ne peut pas supprimer
+      // retourne erreur : vous ne pouvez pas supprimer ce topic
+      header('location: '.$homePage?'?erreur=user');
+      exit;
     }
-
-    header('location: /');
+    header('location: '.$homePage.'?delete=ok'); // le topic a bien été supprimé
     exit;
-  }
-  else
-  {
-    // si on ne provient d'aucun formulaire
   }
 
 ?>
