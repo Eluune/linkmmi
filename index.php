@@ -14,7 +14,7 @@
 
   <!-- Links -->
   <link rel="stylesheet" href="css/style.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <!--<link rel="stylesheet" href="css/style.css">-->
   <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 
@@ -111,26 +111,30 @@
       <h2>LinkMMI</h2>
       <form action="">
         <label for="prenom"><i class="icofont-user-alt-3"></i>
-          <input type="text" id="prenom" placeholder="Prénom">
+          <input type="text" id="prenom" require placeholder="Prénom *">
         </label>
         <label for="nom"><i class="icofont-user-alt-3"></i>
-          <input type="text" id="nom" placeholder="Nom">
+          <input type="text" id="nom" require  placeholder="Nom *">
         </label>
         <label for="mail"><i class="icofont-email"></i>
-          <input type="mail" id="mail" placeholder="Mail">
+          <input type="mail" id="mail" require placeholder="Mail *">
         </label>
         <label for="password"><i class="icofont-lock"></i>
-          <input type="password" id="password" placeholder="Mot de passe">
+          <input type="password" id="password" require placeholder="Mot de passe *">
         </label>
-        <label for="portfolio"><i class="icofont-link-alt"></i>
-          <input type="url" id="portfolio" placeholder="portfolio">
         </label>
-        <label for="dateNaissance"><i class="icofont-calendar"></i>
-          <input type="date" id="dateNaissance">
+        <label for="password2"><i class="icofont-lock"></i>
+          <input type="password" id="password2" require placeholder="Valider mot de passe *">
         </label>
         <button type="submit">S'inscrire</button>
       </form>
       <button class="closeInscript"><i class="icofont-close"></i></button>
+    </div>
+  </div>
+  <div class="popupImg-container">
+    <div class="imgPopup">
+      <button class="closeImg"><i class="icofont-close"></i></button>
+      <img src="" alt="">
     </div>
   </div>
 

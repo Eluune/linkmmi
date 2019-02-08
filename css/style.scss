@@ -230,6 +230,7 @@ html,body
       }
 
       .image-content {
+        cursor: pointer;
         width: 100%;
         height: 40vh;
 
@@ -412,6 +413,7 @@ html,body
   }
 }
 .popupInscript {
+  cursor:pointer;
   display: none;
   position: fixed;
   width: 100%;
@@ -425,12 +427,15 @@ html,body
     display: block;
   }
   .contentPopup {
+    cursor:initial;
     background-color: #fff;
     width: 80%;
     margin: 10vh auto;
     padding: 2em;
     position: relative;
+    border-radius: 5px;
     .closeInscript{
+      cursor: pointer;
       position: absolute;
       top: 1em;
       right: 1em;
@@ -470,6 +475,7 @@ html,body
         padding: 0.5em;
         border:none;
         background-color: $yellow;
+        border-radius: 5px;
       }
     }
   }
@@ -497,5 +503,52 @@ html,body
   }
   &:hover::before{
     width: 80%;
+  }
+}
+.popupImg-container {
+  cursor:pointer;
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: #00000099;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  &.active{
+    display: block;
+  }
+  .imgPopup {
+    cursor:initial;
+    background-color: #fff;
+    padding: 1em;
+    position: absolute;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 80vw;
+    @extend %centrer;
+    img{
+      object-fit: contain;
+      max-width: 80vw;
+      max-height: 90vh;
+    }
+    .closeImg{
+      cursor: pointer;
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      border: none;
+      background-color: transparent;
+      font-size: 2em;
+      color: $black;
+      transition:0.2s;
+      border-radius: 50%;
+      line-height: 1;
+      padding: 0;
+      &:hover{
+        color: $yellow;
+      }
+    }
   }
 }
