@@ -20,6 +20,7 @@ PRIMARY KEY (idMessage)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS utilisateur ;
 CREATE TABLE utilisateur (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,
+atnameUser CHAR(100),
 mailUser CHAR(100),
 passwordUser CHAR(100),
 prenomUser CHAR(100),
@@ -41,9 +42,10 @@ PRIMARY KEY (idCommentaire)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS topic ;
 CREATE TABLE topic (idTopic BIGINT(8) AUTO_INCREMENT NOT NULL,
-imgTopic CHAR(100),
 contenuTopic TEXT,
+imgTopic CHAR(100),
 dateTopic DATETIME,
+editTopic DATETIME,
 idUser BIGINT(8),
 PRIMARY KEY (idTopic)) ENGINE=InnoDB;
 
