@@ -14,6 +14,7 @@
 
   <!-- Links -->
   <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 
@@ -26,7 +27,7 @@
         <div class="information">
 
           <h1>Connexion</h1>
-          <a href="#">Inscription</a>
+          <a href="#" id="inscript" class="animUnderline">Inscription</a>
 
           <form class="" action="index.html" method="post">
             <input type="text" name="login" placeholder="Login">
@@ -103,6 +104,34 @@
       </div> <!-- Fermeture .message-accueil -->
     </div> <!-- Fermeture .section-right -->
 
+  </div>
+
+  <div class="popupInscript">
+    <div class="contentPopup">
+      <h2>LinkMMI</h2>
+      <form action="">
+        <label for="prenom"><i class="icofont-user-alt-3"></i>
+          <input type="text" id="prenom" placeholder="Prénom">
+        </label>
+        <label for="nom"><i class="icofont-user-alt-3"></i>
+          <input type="text" id="nom" placeholder="Nom">
+        </label>
+        <label for="mail"><i class="icofont-email"></i>
+          <input type="mail" id="mail" placeholder="Mail">
+        </label>
+        <label for="password"><i class="icofont-lock"></i>
+          <input type="password" id="password" placeholder="Mot de passe">
+        </label>
+        <label for="portfolio"><i class="icofont-link-alt"></i>
+          <input type="url" id="portfolio" placeholder="portfolio">
+        </label>
+        <label for="dateNaissance"><i class="icofont-calendar"></i>
+          <input type="date" id="dateNaissance">
+        </label>
+        <button type="submit">S'inscrire</button>
+      </form>
+      <button class="closeInscript"><i class="icofont-close"></i></button>
+    </div>
   </div>
 
   <script src="js/script.js" type="text/javascript"></script>
