@@ -1,9 +1,22 @@
+<?php
+  include("bdd/config.php");
+  include("bdd/bdd.php");
+
+  $_SESSION['id'] = 1;
+
+  $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
+  $resultats=$bdd->query($requete);
+  $user=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $resultats->closeCursor();
+
+  $atname = explode('#',$user[0]->atnameUser);
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Profil</title>
+    <title><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="css/profil.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
@@ -32,7 +45,7 @@
             </div>
             <div class="contentProfil">
                 <div class="descProfil">
-                    <h3>Marie Durant<br><em class="highLight">@Marie_Drt</em></h3>
+                    <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname; ?></em></h3>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
