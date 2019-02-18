@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Profil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/profil.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/profil.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 <body>
@@ -33,9 +33,9 @@
             <div class="contentProfil">
                 <div class="descProfil">
                     <h3>Marie Durant<br><em class="highLight">@Marie_Drt</em></h3>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     <div class="profilNum">Relations<br><em class="highLight">12</em></div>
                     <div class="profilNum">Publications<br><em class="highLight">6</em></div>
                 </div>
