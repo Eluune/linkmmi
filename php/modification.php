@@ -11,6 +11,20 @@
         photoUser CHAR(100),
         banniereUser CHAR(100),
         portfolioUser CHAR(100),
+
+        DROP TABLE IF EXISTS travail ;
+        CREATE TABLE travail (idTravail BIGINT(8) AUTO_INCREMENT NOT NULL,
+        villeTravail CHAR(100),
+        nomTravail TEXT,
+        intituleTravail TEXT,
+        PRIMARY KEY (idTravail)) ENGINE=InnoDB;
+
+        DROP TABLE IF EXISTS travaildans ;
+        CREATE TABLE travaildans (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,
+        idTravail BIGINT(8) NOT NULL,
+        debutTravail DATE,
+        finTravail DATE,
+        PRIMARY KEY (idUser,idTravail)) ENGINE=InnoDB;
   */
   include("../bdd/config.php");
   include("../bdd/bdd.php");
