@@ -33,9 +33,9 @@
             <div class="contentProfil">
                 <div class="descProfil">
                     <h3>Marie Durant<br><em class="highLight">@Marie_Drt</em></h3>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
-                    A étudier à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
+                    A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     <div class="profilNum">Relations<br><em class="highLight">12</em></div>
                     <div class="profilNum">Publications<br><em class="highLight">6</em></div>
                 </div>
