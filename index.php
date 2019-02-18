@@ -130,6 +130,7 @@
       <button class="closeInscript"><i class="icofont-close"></i></button>
     </div>
   </div>
+
   <div class="popupImg-container">
     <div class="imgPopup">
       <button class="closeImg"><i class="icofont-close"></i></button>

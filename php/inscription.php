@@ -9,7 +9,6 @@
   *   - id
   */
 
-
   include("../bdd/config.php");
   include("../bdd/bdd.php");
 
