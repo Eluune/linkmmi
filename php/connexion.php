@@ -11,22 +11,23 @@
   include("../bdd/config.php");
   include("../bdd/bdd.php");
 
-  if(isset($_POST["submit"]) && !empty($_POST["mailUser"]) && !empty($_POST["passwordUser"]))
+  if(!empty($_POST["mailUser"]) && !empty($_POST["passwordUser"]))
   {
-    $requete='SELECT * FROM utilisateur';
+    $requete='SELECT idUser, mailUser, passwordUser FROM utilisateur';
     $resultats=$bdd->query($requete);
     $utilisateurs=$resultats->fetchAll(PDO::FETCH_OBJ);
     $resultats->closeCursor();
 
     $connexion = false;
-    $finish = 0;
-    $erreur = "Email éronné";
+    $i = 0;
+    $erreur = "email";
 
     do
     {
       if($utilisateurs[$i]->mailUser == $_POST["mailUser"] || $utilisateurs[$i]->idUser == $_POST["mailUser"])
       {
-        if(password_verify($_POST["passwordUser"], $utilisateurs[$i]->passwordUser))
+        //if(password_verify($_POST["passwordUser"], $utilisateurs[$i]->passwordUser))
+        if($_POST["passwordUser"] == $utilisateurs[$i]->passwordUser)
         {
           session_start();
           $_SESSION["mailUser"] = $utilisateurs[$i]->mailUser;
@@ -35,15 +36,21 @@
         }
         else
         {
-          $erreur = "Mot de passe éronné";
+          $erreur = "mdp";
         }
       }
-      $finish++;
+      $i++;
     }
-    while(!$connexion || $finish < count($utilisateurs));
+    while(!$connexion && $i < count($utilisateurs));
 
-    if($connexion) { echo("connecté"); }
-    else { echo($erreur); }
+    if($connexion)
+    {
+      header('Location: ../profil.php');
+    }
+    else
+    {
+      
+      echo($erreur);
+    }
   }
-
 ?>

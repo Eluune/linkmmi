@@ -1,7 +1,7 @@
 <?php
     $hote='localhost';
     $port='';
-    $nom_bd='academage-test';
+    $nom_bd='linkmmi';
     $identifiant='root';
     $mot_de_passe='';
     $encodage='utf8';

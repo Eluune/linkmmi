@@ -28,10 +28,10 @@
           <h1>Connexion</h1>
           <a href="#" id="inscript" class="animUnderline">Inscription</a>
 
-          <form class="" action="index.html" method="post">
-            <input type="text" name="login" placeholder="Login">
+          <form action="php/connexion.php" method="post">
+            <input type="text" name="mailUser" placeholder="Login">
             <br>
-            <input type="password" name="password" placeholder="Mot de passe">
+            <input type="password" name="passwordUser" placeholder="Mot de passe">
             <br>
             <input type="submit" value="Se connexion">
           </form>
@@ -130,7 +130,6 @@
       <button class="closeInscript"><i class="icofont-close"></i></button>
     </div>
   </div>
-
   <div class="popupImg-container">
     <div class="imgPopup">
       <button class="closeImg"><i class="icofont-close"></i></button>
