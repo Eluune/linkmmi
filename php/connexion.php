@@ -26,7 +26,6 @@
     {
       if($utilisateurs[$i]->mailUser == $_POST["mailUser"] || $utilisateurs[$i]->idUser == $_POST["mailUser"])
       {
-        //if(password_verify($_POST["passwordUser"], $utilisateurs[$i]->passwordUser))
         if($_POST["passwordUser"] == $utilisateurs[$i]->passwordUser)
         {
           session_start();
@@ -49,7 +48,7 @@
     }
     else
     {
-      
+
       echo($erreur);
     }
   }

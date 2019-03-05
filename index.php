@@ -125,7 +125,7 @@
         <label for="password2"><i class="icofont-lock"></i>
           <input type="password" id="password2" require placeholder="Valider mot de passe *">
         </label>
-        <button type="submit">S'inscrire</button>
+        <button id="btn-inscription">S'inscrire</button>
       </form>
       <button class="closeInscript"><i class="icofont-close"></i></button>
     </div>
@@ -139,6 +139,7 @@
 
   <script src="js/script.js" type="text/javascript"></script>
   <script src="js/section-connexion.js" type="text/javascript"></script>
+  <script src="js/inscription.js" type="text/javascript"></script>
 
 </body>
 </html>
