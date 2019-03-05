@@ -1,8 +1,7 @@
 DROP TABLE IF EXISTS travail ;
 CREATE TABLE travail (idTravail BIGINT(8) AUTO_INCREMENT NOT NULL,
 villeTravail CHAR(100),
-nomTravail TEXT,
-intituleTravail TEXT,
+entrepriseTravail TEXT,
 PRIMARY KEY (idTravail)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS conversation ;
@@ -67,6 +66,7 @@ CREATE TABLE travaildans (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,
 idTravail BIGINT(8) NOT NULL,
 debutTravail DATE,
 finTravail DATE,
+fonctionTravail TEXT,
 PRIMARY KEY (idUser,
  idTravail)) ENGINE=InnoDB;
 

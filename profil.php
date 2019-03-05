@@ -45,7 +45,7 @@
             </div>
             <div class="contentProfil">
                 <div class="descProfil">
-                    <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname; ?></em></h3>
+                    <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname[0]; ?></em></h3>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
                     A étudié à <em class="highLight">l'IUT du Puy en Velay</em><br>
