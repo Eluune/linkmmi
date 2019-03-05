@@ -2,13 +2,35 @@
   include("bdd/config.php");
   include("bdd/bdd.php");
 
-  $_SESSION['id'] = 1;
+  $_SESSION['id']=1;
+
+  if(isset($_GET['user']))
+  {
+    if(!empty($_GET['user']))
+    {
+      $requete='SELECT * FROM utilisateur WHERE idUser='.$_GET["user"];
+      $resultats=$bdd->query($requete);
+      $user=$resultats->fetchAll(PDO::FETCH_OBJ);
+      $resultats->closeCursor();
+
+      if(empty($user))
+      {
+        $idUser = $_SESSION['id'];
+
+        $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
+        $resultats=$bdd->query($requete);
+        $user=$resultats->fetchAll(PDO::FETCH_OBJ);
+        $resultats->closeCursor();
+      }
+      else { $idUser = $user[0]->idUser; }
+    }
+  }
 
   // tableau avec les mois de l'année
   $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
 
   // récupération des informations utilisateur
-  $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
+  $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
   $resultats=$bdd->query($requete);
   $user=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
@@ -16,16 +38,16 @@
   $atname = explode('#',$user[0]->atnameUser);
 
   // récupération des informations travail utilisateur
-  $requete='SELECT travail.villeTravail AS "ville", travail.entrepriseTravail AS "entreprise", travaildans.fonctionTravail AS "fonction"
+  $requete='SELECT travaildans.idTravail AS "id", travail.villeTravail AS "ville", travail.entrepriseTravail AS "entreprise", travaildans.fonctionTravail AS "fonction"
             FROM travaildans, travail
-            WHERE travaildans.idUser='.$_SESSION["id"].' AND travaildans.idTravail = travail.idTravail
+            WHERE travaildans.idUser='.$idUser.' AND travaildans.idTravail = travail.idTravail
             ORDER BY travaildans.debutTravail DESC';
   $resultats=$bdd->query($requete);
   $travails=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
 
   // récupération des informations relations utilisateur
-  $requete='SELECT idUser_suivit FROM follow WHERE idUser_suit='.$_SESSION["id"].' AND acceptationSuivi = 1';
+  $requete='SELECT idUser_suivit FROM follow WHERE idUser_suit='.$idUser.' AND acceptationSuivi = 1';
   $resultats=$bdd->query($requete);
   $userSuivi=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
@@ -33,7 +55,7 @@
   // récupération des informations posts utilisateur
   $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
             FROM topic, utilisateur
-            WHERE topic.idUser='.$_SESSION["id"].' AND topic.idUser = utilisateur.idUser
+            WHERE topic.idUser='.$idUser.' AND topic.idUser = utilisateur.idUser
             ORDER BY topic.dateTopic DESC';
   $resultats=$bdd->query($requete);
   $posts=$resultats->fetchAll(PDO::FETCH_OBJ);
@@ -66,34 +88,35 @@
         </div>
     </nav>
     <div class="content">
-        <img src="img-placeholder/bestLoutre.jpg" alt="" class="banniere">
+        <?php
+          if(!empty($user[0]->banniereUser) && $user[0]->banniereUser != 'NULL') { ?> <img src="<?php echo $user[0]->banniereUser; ?>" class="banniere"> <?php }
+          else { ?> <img src="img-placeholder/bestLoutre.jpg" alt="" class="banniere"> <?php }
+        ?>
         <div class="profil">
             <div class="profilPictContainer">
               <?php
-                if(empty($user[0]->photoUser)) { ?> <img src="<?php echo $user[0]->photoUser; ?>" class="profilPict"> <?php }
+                if(!empty($user[0]->photoUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $user[0]->photoUser; ?>" class="profilPict"> <?php }
                 else { ?> <img src="img-placeholder/bestLoutre.jpg" class="profilPict"> <?php }
               ?>
             </div>
             <div class="contentProfil">
-                <div class="descProfil">
-                    <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname[0]; ?></em></h3>
-                    <?php
-                      if(!empty($travails))
-                      {
-                        foreach ($travails as $travail)
-                        {
-                          echo '<em>'.$travail->fonction.' à <a href=".." class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></em><br>';
-                        }
-                      }
-                      else
-                      {
-                        echo 'Vide';
-                      }
-                    ?>
-                    <div class="profilNum">Relation<?php if(count($userSuivi)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($userSuivi); ?></em></div>
-                    <div class="profilNum">Publication<?php if(count($posts)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($posts); ?></em></div>
+              <div class="descProfil">
+                <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname[0]; ?></em></h3>
+                <?php
+                  if(!empty($travails))
+                  {
+                    foreach ($travails as $travail)
+                    {
+                      echo '<em>'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></em><br>';
+                    }
+                  }
+                ?>
+                <div class="containerProfilNul">
+                  <div class="profilNum">Relation<?php if(count($userSuivi)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($userSuivi); ?></em></div>
+                  <div class="profilNum">Publication<?php if(count($posts)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($posts); ?></em></div>
                 </div>
-                <div class="subBtn">Éditer le profil</div>
+              </div>
+              <?php if($_SESSION['id'] == $idUser){ ?> <div class="subBtn">Éditer le profil</div> <?php } ?>
             </div>
         </div>
         <div class="flux">
@@ -110,9 +133,17 @@
               $requete='SELECT commentaire.contenuCommentaire AS "contenu", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
                         FROM commentaire, utilisateur
                         WHERE commentaire.idTopic='.$post->id.' AND commentaire.idUser = utilisateur.idUser
-                        ORDER BY commentaire.dateCommentaire DESC';
+                        ORDER BY commentaire.dateCommentaire ASC';
               $resultats=$bdd->query($requete);
               $commentaires=$resultats->fetchAll(PDO::FETCH_OBJ);
+              $resultats->closeCursor();
+
+              // récupération des informations références post
+              $requete='SELECT tag.idTag AS "id", tag.nomTag AS "tag"
+                        FROM tag, reference
+                        WHERE reference.idTopic='.$post->id.' AND reference.idTag = tag.idTag';
+              $resultats=$bdd->query($requete);
+              $references=$resultats->fetchAll(PDO::FETCH_OBJ);
               $resultats->closeCursor();
 
               $heure = explode(':',explode(' ',$post->date)[1])[0];
@@ -126,7 +157,7 @@
                 <div class="article">
                   <div class="author">
                     <?php
-                      if(empty($post->imgUser)) { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict"> <?php }
+                      if(!empty($post->imgUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict"> <?php }
                       else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict"> <?php }
                     ?>
                     <h3><?php echo $post->prenom.' '.$post->nom; ?><br>
@@ -136,7 +167,14 @@
                     </h3>
                   </div>
                   <div class="contentTxt">
-                    <?php echo $post->contenu; ?>
+                    <?php
+                      echo $post->contenu.'<br>';
+                      foreach ($references as $ref) {
+                        ?>
+                          <a href="recherche.php?tag=<?php echo $ref->id; ?>">#<?php echo $ref->tag; ?></a>
+                        <?php
+                      }
+                    ?>
                   </div>
                   <?php
                     if(!empty($post->imgTopic))
@@ -172,9 +210,7 @@
                               }
                             ?>
                           </ul>
-                          <div class="subBtn">
-                            Voir plus
-                          </div>
+                          <div class="subBtn">Voir plus</div>
                         </div>
                       <?php
                     }
@@ -197,9 +233,7 @@
                     <p>Pat Icier <em class="highLight">@Pat_ic</em></p>
                     <button class="btn-suivre">Suivre</button>
                 </div>
-                <div class="subBtn">
-                        Voir plus
-                </div>
+                <div class="subBtn">Voir plus</div>
             </div>
             <div class="message">
                 <h3>Message</h3>
@@ -217,9 +251,7 @@
                     <input type="text" placeholder="Rechercher">
                     <button type="submit">?</button>
                 </form>
-                <div class="subBtn">
-                        Voir plus
-                </div>
+                <div class="subBtn">Voir plus</div>
             </div>
 
             <em class="highLight">LinkMMI © 2019</em>

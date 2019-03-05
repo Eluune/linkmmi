@@ -163,14 +163,15 @@ nav{
                 em{
                     font-size: 0.7em;
                 }
-                .profilNum{
-                    display: inline-block;
-                    width: 49%;
-                    margin: 0 auto;
+                .containerProfilNul{
+                    display: flex;
                     text-align: center;
-                    margin-top: 2em;
-                    em{
-                        font-size: 2em;
+                    .profilNum{
+                        width: 49%;
+                        margin-top: 2em;
+                        em{
+                            font-size: 2em;
+                        }
                     }
                 }
             }
@@ -205,6 +206,18 @@ nav{
             .contentTxt{
                 padding: 1em;
                 text-align: justify;
+
+                br{
+                  margin-bottom: 10px;
+                }
+
+                a{
+                  font-size: .8em;
+                  text-decoration: none;
+                  color: black;
+                  font-weight: 600;
+                  margin-right: 2.5px;
+                }
             }
             .contentPict{
                 overflow: hidden;
@@ -234,6 +247,12 @@ nav{
                     li{
                         list-style-type: none;
                         padding-bottom: 0.5em;
+
+                        a{
+                          text-decoration: none;
+                          color: black;
+                          font-weight: 600;
+                        }
                     }
                 }
                 .subBtn{
