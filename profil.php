@@ -2,7 +2,14 @@
   include("bdd/config.php");
   include("bdd/bdd.php");
 
+// ajouter liens images + banniereUser
+// ajouter portfolio + description + birthdate
+// ajouter popup modification
+// ajouter like topic
+// ajouter commentaire topic
+
   $_SESSION['id']=1;
+  $afficherUser = false;
 
   if(isset($_GET['user']))
   {
@@ -13,17 +20,21 @@
       $user=$resultats->fetchAll(PDO::FETCH_OBJ);
       $resultats->closeCursor();
 
-      if(empty($user))
+      if(!empty($user))
       {
-        $idUser = $_SESSION['id'];
-
-        $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
-        $resultats=$bdd->query($requete);
-        $user=$resultats->fetchAll(PDO::FETCH_OBJ);
-        $resultats->closeCursor();
+        $afficherUser = true;
+        $idUser = $user[0]->idUser;
       }
-      else { $idUser = $user[0]->idUser; }
     }
+  }
+  if(!$afficherUser)
+  {
+      $idUser = $_SESSION['id'];
+
+      $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
+      $resultats=$bdd->query($requete);
+      $user=$resultats->fetchAll(PDO::FETCH_OBJ);
+      $resultats->closeCursor();
   }
 
   // tableau avec les mois de l'année
