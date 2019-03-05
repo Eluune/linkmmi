@@ -4,6 +4,9 @@
 
   $_SESSION['id'] = 1;
 
+  // tableau avec les mois de l'année
+  $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+
   // récupération des informations utilisateur
   $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
   $resultats=$bdd->query($requete);
@@ -28,7 +31,7 @@
   $resultats->closeCursor();
 
   // récupération des informations posts utilisateur
-  $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.imgUser AS "imgUser"
+  $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
             FROM topic, utilisateur
             WHERE topic.idUser='.$_SESSION["id"].' AND topic.idUser = utilisateur.idUser
             ORDER BY topic.dateTopic DESC';
@@ -66,7 +69,10 @@
         <img src="img-placeholder/bestLoutre.jpg" alt="" class="banniere">
         <div class="profil">
             <div class="profilPictContainer">
-                <img src="img-placeholder/bestLoutre.jpg" class="profilPict">
+              <?php
+                if(empty($user[0]->photoUser)) { ?> <img src="<?php echo $user[0]->photoUser; ?>" class="profilPict"> <?php }
+                else { ?> <img src="img-placeholder/bestLoutre.jpg" class="profilPict"> <?php }
+              ?>
             </div>
             <div class="contentProfil">
                 <div class="descProfil">
@@ -76,7 +82,7 @@
                       {
                         foreach ($travails as $travail)
                         {
-                          echo $travail->fonction.' à <em class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</em><br>';
+                          echo '<em>'.$travail->fonction.' à <a href=".." class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></em><br>';
                         }
                       }
                       else
@@ -101,17 +107,28 @@
               $resultats->closeCursor();
 
               // récupération des informations commentaires post
-              $requete='SELECT commentaire.contenuCommentaire AS "contenu", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.imgUser AS "imgUser"
+              $requete='SELECT commentaire.contenuCommentaire AS "contenu", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
                         FROM commentaire, utilisateur
-                        WHERE commentaire.idTopic='.$post->id.' AND commentaire.idUser = utilisateur.idUser';
+                        WHERE commentaire.idTopic='.$post->id.' AND commentaire.idUser = utilisateur.idUser
+                        ORDER BY commentaire.dateCommentaire DESC';
               $resultats=$bdd->query($requete);
               $commentaires=$resultats->fetchAll(PDO::FETCH_OBJ);
               $resultats->closeCursor();
 
+              $heure = explode(':',explode(' ',$post->date)[1])[0];
+              $min = explode(':',explode(' ',$post->date)[1])[1];
+              $jour = explode('-',explode(' ',$post->date)[0])[2] + 0;
+              $mois = explode('-',explode(' ',$post->date)[0])[1] - 1;
+              $annee = explode('-',explode(' ',$post->date)[0])[0];
+              $date = $heure.'h'.$min.' le '.$jour.' '.$months[$mois].' '.$annee;
+
               ?>
                 <div class="article">
                   <div class="author">
-                    <img src="img-placeholder/bestLoutre.jpg" alt="" class="authorPict">
+                    <?php
+                      if(empty($post->imgUser)) { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict"> <?php }
+                      else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict"> <?php }
+                    ?>
                     <h3><?php echo $post->prenom.' '.$post->nom; ?><br>
                       <em class="highLight">
                         <a class="highLight" href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>">@<?php echo explode('#',$post->atname)[0]; ?></a>
@@ -132,10 +149,10 @@
                     }
                   ?>
                   <div class="contentDetails">
-                    Publié le <em class="highLight"><?php echo $post->date; //12h00 le 21 janvier 2019 ?></em>
+                    Publié à <em class="highLight"><?php echo $date ?></em>
                     <div class="subBtn">
-                      <span> <i class="icofont-heart-alt c-yellow"></i><?php echo count($likes); ?></span>
-                      <span> <i class="icofont-google-talk c-grey"></i><?php echo count($commentaires); ?></span>
+                      <span><i class="icofont-heart-alt c-yellow"></i> <?php echo count($likes); ?></span>
+                      <span><i class="icofont-google-talk c-grey"></i> <?php echo count($commentaires); ?></span>
                     </div>
                   </div>
                   <?php
@@ -144,8 +161,16 @@
                       ?>
                         <div class="contentcomm">
                           <ul>
-                            <li><b>@Sarah_croche</b> Wouah ! Cette photo est magnifique.</li>
-                            <li><b>@Lara_clette</b> <em class="tagPpl">@Vincent_tim</em> C'est cool</li>
+                            <?php
+                              foreach ($commentaires as $commentaire) {
+                                ?>
+                                  <li>
+                                    <a href="profil.php?user=<?php echo explode('#',$commentaire->atname)[1]; ?>">@<?php echo explode('#',$commentaire->atname)[0]; ?></a>
+                                    <?php echo $commentaire->contenu; ?>
+                                  </li>
+                                <?php
+                              }
+                            ?>
                           </ul>
                           <div class="subBtn">
                             Voir plus
@@ -158,51 +183,6 @@
               <?php
             }
           ?>
-
-            <div class="article">
-                <div class="author">
-                    <img src="img-placeholder/bestLoutre.jpg" alt="" class="authorPict">
-                    <h3>Marie Durant<br><em class="highLight">@Marie_Drt</em></h3>
-                </div>
-                <div class="contentTxt">
-                    Cum saepe multa, tum memini domi in hemicyclio sedentem, ut solebat, cum et ego essem una et pauci admodum familiares, in eum sermonem illum incidere qui tum forte multis erat in ore. Meministi enim profecto, Attice, et eo magis, quod P. Sulpicio utebare multum, cum is tribunus plebis capitali odio a Q. Pompeio, qui tum erat consul, dissideret, quocum coniunctissime et amantissime vixerat, quanta esset hominum vel admiratio vel querella.
-                </div>
-                <div class="contentPict">
-                    <img src="img-placeholder/bestLoutre.jpg" alt="">
-                </div>
-                <div class="contentDetails">
-                    Publié le<em class="highLight"> 12h00 le 21 janvier 2019</em>
-                    <div class="subBtn">
-                        <span><i class="icofont-heart-alt c-yellow"></i>300</span>
-                        <span> <i class="icofont-google-talk c-grey"></i> 25</span>
-                    </div>
-                </div>
-                <div class="contentcomm">
-                    <ul>
-                        <li><b>@Sarah_croche</b> Wouah ! Cette photo est magnifique.</li>
-                        <li><b>@Lara_clette</b> <em class="tagPpl">@Vincent_tim</em> C'est cool</li>
-                    </ul>
-                    <div class="subBtn">
-                        Voir plus
-                    </div>
-                </div>
-            </div>
-            <div class="article">
-                <div class="author">
-                    <img src="img-placeholder/bestLoutre.jpg" alt="" class="authorPict">
-                    <h3>Marie Durant<br><em class="highLight">@Marie_Drt</em></h3>
-                </div>
-                <div class="contentTxt">
-                    Cum saepe multa, tum memini domi in hemicyclio sedentem, ut solebat, cum et ego essem una et pauci admodum familiares, in eum sermonem illum incidere qui tum forte multis erat in ore. Meministi enim profecto, Attice, et eo magis, quod P. Sulpicio utebare multum, cum is tribunus plebis capitali odio a Q. Pompeio, qui tum erat consul, dissideret, quocum coniunctissime et amantissime vixerat, quanta esset hominum vel admiratio vel querella.
-                </div>
-                <div class="contentDetails">
-                    Publié le<em class="highLight"> 12h00 le 21 janvier 2019</em>
-                    <div class="subBtn">
-                        <span><i class="icofont-heart-alt c-yellow"></i>300</span>
-                        <span> <i class="icofont-google-talk c-grey"></i> 25</span>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="other">
             <div class="suggest">
