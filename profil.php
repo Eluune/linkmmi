@@ -1,14 +1,29 @@
 <?php
-  include("bdd/config.php");
-  include("bdd/bdd.php");
+session_start();
 
 // ajouter liens images + banniereUser
-// ajouter portfolio + description + birthdate
 // ajouter popup modification
 // ajouter like topic
 // ajouter commentaire topic
 
   $_SESSION['id']=1;
+
+if(empty($_SESSION['id']))
+{
+  header('location:index.php');
+  exit;
+}
+else
+{
+  include("bdd/config.php");
+  include("bdd/bdd.php");
+
+  // récupération des informations de l'utilisateur courant
+  $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
+  $resultats=$bdd->query($requete);
+  $current_user=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $resultats->closeCursor();
+
   $afficherUser = false;
 
   if(isset($_GET['user']))
@@ -39,6 +54,8 @@
 
   // tableau avec les mois de l'année
   $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+  // fuseau horraire pour les dates
+  $tz = new DateTimeZone('Europe/Paris');
 
   // récupération des informations utilisateur
   $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
@@ -75,6 +92,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Bibliothèques -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?></title>
@@ -85,7 +105,15 @@
 <body>
     <nav>
         <div class="blcNav">
-            <img src="img-placeholder/bestLoutre.jpg" alt="" class="navProfil">
+            <figure id="data-user" data-number="<?php echo $current_user[0]->idUser; ?>">
+              <?php
+                if(!empty($current_user[0]->photoUser && $current_user[0]->photoUser != 'NULL')) { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+              ?>
+              <figcaption>
+                <a href="profil.php"></a>
+              </figcaption>
+            </figure>
             <button class="btn-Y-R">Poster</button>
             <form action="" method="post">
                 <input type="text" placeholder="Rechercher">
@@ -98,11 +126,14 @@
             <button class="btn-Icone"><i class="icofont-heart-alt"></i></button>
         </div>
     </nav>
+
     <div class="content">
         <?php
           if(!empty($user[0]->banniereUser) && $user[0]->banniereUser != 'NULL') { ?> <img src="<?php echo $user[0]->banniereUser; ?>" class="banniere"> <?php }
           else { ?> <img src="img-placeholder/bestLoutre.jpg" alt="" class="banniere"> <?php }
         ?>
+
+        <!-- contenu des informations du profil -->
         <div class="profil">
             <div class="profilPictContainer">
               <?php
@@ -114,11 +145,24 @@
               <div class="descProfil">
                 <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname[0]; ?></em></h3>
                 <?php
+                  if(!empty($user[0]->birthdayUser))
+                  {
+                    $birthday = new DateTime($user[0]->birthdayUser);
+                    echo '<p>Né(e) le '.intval($birthday->format('d')).' '.$months[intval($birthday->format('m'))-1].'</p>';
+                  }
+                  if(!empty($user[0]->descriptionUser))
+                  {
+                    echo '<p>'.$user[0]->descriptionUser.'</p>';
+                  }
+                  if(!empty($user[0]->portfolioUser))
+                  {
+                    echo '<a href="http://'.$user[0]->portfolioUser.'" class="portfolio" target="_blank">Voir le portfolio <i class="icofont-external-link"></i></a>';
+                  }
                   if(!empty($travails))
                   {
                     foreach ($travails as $travail)
                     {
-                      echo '<em>'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></em><br>';
+                      echo '<p>'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></p>';
                     }
                   }
                 ?>
@@ -130,7 +174,10 @@
               <?php if($_SESSION['id'] == $idUser){ ?> <div class="subBtn">Éditer le profil</div> <?php } ?>
             </div>
         </div>
-        <div class="flux">
+        <!-- fin informations du profil -->
+
+        <!-- contenu messages de l'utilisateur -->
+        <div class="section-center">
           <?php
             foreach ($posts as $post) {
 
@@ -138,6 +185,12 @@
               $requete='SELECT idUser FROM aime WHERE idTopic='.$post->id;
               $resultats=$bdd->query($requete);
               $likes=$resultats->fetchAll(PDO::FETCH_OBJ);
+              $resultats->closeCursor();
+
+              // récupération information : user a liké le post
+              $requete='SELECT idUser FROM aime WHERE idUser='.$current_user[0]->idUser.' AND idTopic='.$post->id;
+              $resultats=$bdd->query($requete);
+              $likeExiste=$resultats->fetch();
               $resultats->closeCursor();
 
               // récupération des informations commentaires post
@@ -157,27 +210,28 @@
               $references=$resultats->fetchAll(PDO::FETCH_OBJ);
               $resultats->closeCursor();
 
-              $heure = explode(':',explode(' ',$post->date)[1])[0];
-              $min = explode(':',explode(' ',$post->date)[1])[1];
-              $jour = explode('-',explode(' ',$post->date)[0])[2] + 0;
-              $mois = explode('-',explode(' ',$post->date)[0])[1] - 1;
-              $annee = explode('-',explode(' ',$post->date)[0])[0];
-              $date = $heure.'h'.$min.' le '.$jour.' '.$months[$mois].' '.$annee;
+              $dateTopic = new DateTime($post->date, $tz);
+              $date = $dateTopic->format('H\hi').' le '.intval($dateTopic->format('d')).' '.$months[intval($dateTopic->format('m'))-1].' '.$dateTopic->format('Y');
 
               ?>
-                <div class="article">
-                  <div class="author">
-                    <?php
-                      if(!empty($post->imgUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict"> <?php }
-                      else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict"> <?php }
-                    ?>
-                    <h3><?php echo $post->prenom.' '.$post->nom; ?><br>
-                      <em class="highLight">
-                        <a class="highLight" href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>">@<?php echo explode('#',$post->atname)[0]; ?></a>
-                      </em>
-                    </h3>
-                  </div>
-                  <div class="contentTxt">
+                <div class="actualitées" data-number="<?php echo $post->id; ?>">
+                  <div class="utilisateur">
+
+                    <div class="photo-utilisateur">
+                      <?php
+                        if(!empty($post->imgUser) && $post->imgUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
+                        else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
+                      ?>
+                    </div> <!-- Fermeture .photo-utilisateur -->
+
+                    <div class="info-utilisateur">
+                      <h2><?php echo $post->prenom.' '.$post->nom; ?></h2>
+                      <a href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>">@<?php echo explode('#',$post->atname)[0]; ?></a>
+                    </div> <!-- Fermeture .info-utilisateur -->
+
+                  </div> <!-- Fermeture .utilisateur -->
+
+                  <p class="content-actualité">
                     <?php
                       echo $post->contenu.'<br>';
                       foreach ($references as $ref) {
@@ -186,51 +240,58 @@
                         <?php
                       }
                     ?>
-                  </div>
+                  </p>
+
                   <?php
                     if(!empty($post->imgTopic))
                     {
                       ?>
-                        <div class="contentPict">
-                          <img src="<?php echo $post->imgTopic; ?>" alt="">
+                        <div class="image-content">
+                          <img src="img/<?php echo $post->imgTopic; ?>" alt="Image de publication">
                         </div>
                       <?php
                     }
                   ?>
-                  <div class="contentDetails">
-                    Publié à <em class="highLight"><?php echo $date ?></em>
-                    <div class="subBtn">
-                      <span><i class="icofont-heart-alt c-yellow"></i> <?php echo count($likes); ?></span>
-                      <span><i class="icofont-google-talk c-grey"></i> <?php echo count($commentaires); ?></span>
-                    </div>
+
+                  <p class="date-publication">Publié à <span> <?php echo $date ?></span> </p>
+
+                  <i class="icofont-ui-love like <?php if(!empty($likeExiste)){ echo 'like-active'; } ?>"></i>
+                  <p class="nb-like nb-like-<?php echo $post->id; ?>"><?php echo count($likes); ?></p>
+
+                  <i class="icofont-speech-comments comments" data-number="<?php echo $post->id; ?>"></i> <!-- Remplaccer le $i par id-->
+                  <p class="nb-comments nb-comments-<?php echo $post->id; ?>"><?php echo count($commentaires); ?></p>
+                </div> <!-- Fermeture .actualitées -->
+
+                <div class="section-comments" id="comments-<?php echo $post->id; ?>" data-number="<?php echo $post->id; ?>"> <!-- Remplaccer le $i par id-->
+                  <div class="commentaire-users">
+                    <?php
+                      if(!empty($commentaires))
+                      {
+                        foreach ($commentaires as $commentaire) {
+                          ?>
+                            <a href="profil.php?user=<?php echo explode('#',$commentaire->atname)[1]; ?>">@<?php echo explode('#',$commentaire->atname)[0]; ?></a>
+                            <p><?php echo $commentaire->contenu; ?></p>
+                          <?php
+                        }
+                      }
+                    ?>
                   </div>
-                  <?php
-                    if(!empty($commentaires))
-                    {
-                      ?>
-                        <div class="contentcomm">
-                          <ul>
-                            <?php
-                              foreach ($commentaires as $commentaire) {
-                                ?>
-                                  <li>
-                                    <a href="profil.php?user=<?php echo explode('#',$commentaire->atname)[1]; ?>">@<?php echo explode('#',$commentaire->atname)[0]; ?></a>
-                                    <?php echo $commentaire->contenu; ?>
-                                  </li>
-                                <?php
-                              }
-                            ?>
-                          </ul>
-                          <div class="subBtn">Voir plus</div>
-                        </div>
-                      <?php
-                    }
-                  ?>
-                </div>
+
+                  <div class="photo-utilisateur-comments">
+                    <?php
+                      if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                      else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                    ?>
+                  </div> <!-- Fermeture .photo-utilisateur-comments -->
+
+                  <input type="text" id="text-commentaire-<?php echo $post->id; ?>" name="" placeholder="Ajouter un commentaire...">
+                </div> <!-- Fermeture .section-comments -->
               <?php
             }
           ?>
-        </div>
+        </div> <!-- Fermeture .section-center -->
+
+
         <div class="other">
             <div class="suggest">
                 <h3>Suggestion</h3>
@@ -268,5 +329,8 @@
             <em class="highLight">LinkMMI © 2019</em>
         </div>
     </div>
+
+    <script src="js/script-profil.js" type="text/javascript"></script>
 </body>
 </html>
+<?php } ?>
