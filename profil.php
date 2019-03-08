@@ -6,7 +6,7 @@ session_start();
 // ajouter like topic
 // ajouter commentaire topic
 
-  $_SESSION['id']=1;
+  $_SESSION['id']=2;
 
 if(empty($_SESSION['id']))
 {
@@ -18,6 +18,11 @@ else
   include("bdd/config.php");
   include("bdd/bdd.php");
 
+  // tableau avec les mois de l'année
+  $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+  // fuseau horraire pour les dates
+  $tz = new DateTimeZone('Europe/Paris');
+
   // récupération des informations de l'utilisateur courant
   $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
   $resultats=$bdd->query($requete);
@@ -25,6 +30,9 @@ else
   $resultats->closeCursor();
 
   $afficherUser = false;
+  $wait = false;
+  $friends = false;
+  $accept = false;
 
   if(isset($_GET['user']))
   {
@@ -52,11 +60,6 @@ else
       $resultats->closeCursor();
   }
 
-  // tableau avec les mois de l'année
-  $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
-  // fuseau horraire pour les dates
-  $tz = new DateTimeZone('Europe/Paris');
-
   // récupération des informations utilisateur
   $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
   $resultats=$bdd->query($requete);
@@ -77,8 +80,19 @@ else
   // récupération des informations relations utilisateur
   $requete='SELECT idUser_suivit FROM follow WHERE idUser_suit='.$idUser.' AND acceptationSuivi = 1';
   $resultats=$bdd->query($requete);
-  $userSuivi=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $userTest=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
+
+  $userSuivi = 0;
+
+  foreach($userTest as $test){
+    $requete='SELECT idUser_suivit FROM follow WHERE idUser_suit='.$test->idUser_suivit.' AND acceptationSuivi = 1';
+    $resultats=$bdd->query($requete);
+    $userTestApprobation=$resultats->fetchAll(PDO::FETCH_OBJ);
+    $resultats->closeCursor();
+
+    if(!empty($userTestApprobation)) { $userSuivi++; }
+  }
 
   // récupération des informations posts utilisateur
   $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
@@ -88,6 +102,28 @@ else
   $resultats=$bdd->query($requete);
   $posts=$resultats->fetchAll(PDO::FETCH_OBJ);
   $resultats->closeCursor();
+
+  if($_SESSION['id'] != $idUser)
+  {
+    // on regarde si l'utilisateur courrant suit l'utilisateur sélectionné
+    $requete='SELECT acceptationSuivi FROM follow WHERE idUser_suit='.$_SESSION['id'].' AND idUser_suivit='.$idUser;
+    $resultats=$bdd->query($requete);
+    $acceptationSuiviCurrent=$resultats->fetch();
+    $resultats->closeCursor();
+    // on regarde si l'utilisateur sélectionné suit l'utilisateur currant
+    $requete='SELECT acceptationSuivi FROM follow WHERE idUser_suit='.$idUser.' AND idUser_suivit='.$_SESSION['id'];
+    $resultats=$bdd->query($requete);
+    $acceptationSuiviSelected=$resultats->fetch();
+    $resultats->closeCursor();
+
+    // si le champ n'existe pas, il est considéré égal à 0
+    if(empty($acceptationSuiviCurrent)) { $acceptationSuiviCurrent[0] = 0; }
+    if(empty($acceptationSuiviSelected)) { $acceptationSuiviSelected[0] = 0; }
+
+    if($acceptationSuiviCurrent[0]==1 && $acceptationSuiviSelected[0]==1) { $friends = true; }
+    if($acceptationSuiviCurrent[0]==1 && $acceptationSuiviSelected[0]==0) { $wait = true; }
+    if($acceptationSuiviCurrent[0]==0 && $acceptationSuiviSelected[0]==1) { $accept = true; }
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -103,6 +139,7 @@ else
     <link rel="stylesheet" type="text/css" media="screen" href="icofont/icofont.min.css">
 </head>
 <body>
+  <!--- Menu -->
     <nav>
         <div class="blcNav">
             <figure id="data-user" data-number="<?php echo $current_user[0]->idUser; ?>">
@@ -126,6 +163,7 @@ else
             <button class="btn-Icone"><i class="icofont-heart-alt"></i></button>
         </div>
     </nav>
+    <!-- Fin menu -->
 
     <div class="content">
         <?php
@@ -139,6 +177,20 @@ else
               <?php
                 if(!empty($user[0]->photoUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $user[0]->photoUser; ?>" class="profilPict"> <?php }
                 else { ?> <img src="img-placeholder/bestLoutre.jpg" class="profilPict"> <?php }
+              ?>
+              <?php
+                if($_SESSION['id'] != $idUser)
+                {
+                  ?>
+                    <button id="friend" data-number="<?php echo $idUser; ?>" class="<?php
+                      if(!$wait)
+                      {
+                        if($friends){ echo "friends"; }
+                        else{ echo "unfriends"; if($accept){ echo " accept"; } }
+                      } ?>">
+                    </button>
+                  <?php
+                }
               ?>
             </div>
             <div class="contentProfil">
@@ -167,11 +219,11 @@ else
                   }
                 ?>
                 <div class="containerProfilNul">
-                  <div class="profilNum">Relation<?php if(count($userSuivi)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($userSuivi); ?></em></div>
+                  <div class="profilNum"><span class="textFolower">Relation<?php if($userSuivi>1){ ?>s<?php } ?></span><br><em id="nbFollower" class="highLight"><?php echo $userSuivi; ?></em></div>
                   <div class="profilNum">Publication<?php if(count($posts)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($posts); ?></em></div>
                 </div>
               </div>
-              <?php if($_SESSION['id'] == $idUser){ ?> <div class="subBtn">Éditer le profil</div> <?php } ?>
+              <?php if($_SESSION['id'] == $idUser){ ?> <div id="edit" class="subBtn">Éditer le profil</div> <?php } ?>
             </div>
         </div>
         <!-- fin informations du profil -->
@@ -217,12 +269,15 @@ else
                 <div class="actualitées" data-number="<?php echo $post->id; ?>">
                   <div class="utilisateur">
 
-                    <div class="photo-utilisateur">
+                    <figure class="photo-utilisateur">
                       <?php
                         if(!empty($post->imgUser) && $post->imgUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
                         else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
                       ?>
-                    </div> <!-- Fermeture .photo-utilisateur -->
+                      <figcaption>
+                        <a href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>"></a>
+                      </figcaption>
+                    </figure> <!-- Fermeture .photo-utilisateur -->
 
                     <div class="info-utilisateur">
                       <h2><?php echo $post->prenom.' '.$post->nom; ?></h2>

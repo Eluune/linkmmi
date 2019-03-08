@@ -85,7 +85,8 @@ PRIMARY KEY (idTag,
 DROP TABLE IF EXISTS follow ;
 CREATE TABLE follow (
 idUser_suit BIGINT(8),
-idUser_suivit BIGINT(8)) ENGINE=InnoDB;
+idUser_suivit BIGINT(8),
+acceptationSuivi TINYINT(1)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS bloque ;
 CREATE TABLE bloque (

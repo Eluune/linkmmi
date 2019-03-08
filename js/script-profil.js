@@ -18,6 +18,11 @@ $(document).ready(function() {
 
     $(".like").click(function(){
       $(this).toggleClass('like-active');
+      if($(this).hasClass('like-active')){
+        $(this).addClass('like-anim');
+      } else{
+        $(this).removeClass('like-anim');
+      }
       var idUser = $('#data-user').attr("data-number");
       var idPost = $(this).parent().attr("data-number");
       $.ajax
@@ -58,7 +63,6 @@ $(document).ready(function() {
              success: function (response) {
                var atname = response.split("#");
                nbComment++;
-               console.log(nbComment)
                $('.nb-comments-'+idPost).text(nbComment);
                $("#comments-"+idPost+" .commentaire-users").append('<a href="profil.php?user='+atname[1]+'">@'+atname[0]+'</a><p>'+commentaire+'</p>');
              },
@@ -67,6 +71,50 @@ $(document).ready(function() {
              }
           });
         }
+      }
+    });
+
+    $("#friend").click(function(){
+      if($(this).hasClass('friends') || $(this).hasClass('unfriends')){
+        var idUserCurrent = $('#data-user').attr("data-number");
+        var idUserSelected = $(this).attr("data-number");
+
+        if($(this).hasClass('friends')){
+          $(this).removeClass();
+          $(this).addClass('unfriends');
+        }
+        else if($(this).hasClass('accept')){
+          $(this).removeClass();
+          $(this).addClass('friends');
+        }
+        else if($(this).hasClass('unfriends')){
+          $(this).removeClass();
+        }
+
+        $.ajax
+        ({
+           url: "php/follow.php",
+           type: "post",
+           data: { idUser_suit: idUserCurrent,
+                   idUser_suivit: idUserSelected
+                  },
+          success: function (response) {
+            if(response == 'ajout'){
+              $("#nbFollower").text(parseInt($("#nbFollower").text())+1);
+              if($("#nbFollower").text() == '2'){
+                $(".textFolower").text('Relations');
+              }
+            } else if(response == 'suppression'){
+              $("#nbFollower").text(parseInt($("#nbFollower").text())-1);
+              if($("#nbFollower").text() == '1'){
+                $(".textFolower").text('Relation');
+              }
+            }
+          },
+           error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrow);
+           }
+        });
       }
     });
 });
