@@ -1,12 +1,9 @@
 <?php
 session_start();
 
-// ajouter liens images + banniereUser
 // ajouter popup modification
-// ajouter like topic
-// ajouter commentaire topic
 
-  $_SESSION['id']=2;
+  $_SESSION['id']=1;
 
 if(empty($_SESSION['id']))
 {
@@ -52,12 +49,12 @@ else
   }
   if(!$afficherUser)
   {
-      $idUser = $_SESSION['id'];
+    $idUser = $_SESSION['id'];
 
-      $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
-      $resultats=$bdd->query($requete);
-      $user=$resultats->fetchAll(PDO::FETCH_OBJ);
-      $resultats->closeCursor();
+    $requete='SELECT * FROM utilisateur WHERE idUser='.$idUser;
+    $resultats=$bdd->query($requete);
+    $user=$resultats->fetchAll(PDO::FETCH_OBJ);
+    $resultats->closeCursor();
   }
 
   // récupération des informations utilisateur
@@ -86,9 +83,9 @@ else
   $userSuivi = 0;
 
   foreach($userTest as $test){
-    $requete='SELECT idUser_suivit FROM follow WHERE idUser_suit='.$test->idUser_suivit.' AND acceptationSuivi = 1';
+    $requete='SELECT acceptationSuivi FROM follow WHERE idUser_suit='.$test->idUser_suivit.' AND idUser_suivit='.$idUser.' AND acceptationSuivi = 1';
     $resultats=$bdd->query($requete);
-    $userTestApprobation=$resultats->fetchAll(PDO::FETCH_OBJ);
+    $userTestApprobation=$resultats->fetch();
     $resultats->closeCursor();
 
     if(!empty($userTestApprobation)) { $userSuivi++; }
@@ -219,8 +216,16 @@ else
                   }
                 ?>
                 <div class="containerProfilNul">
-                  <div class="profilNum"><span class="textFolower">Relation<?php if($userSuivi>1){ ?>s<?php } ?></span><br><em id="nbFollower" class="highLight"><?php echo $userSuivi; ?></em></div>
-                  <div class="profilNum">Publication<?php if(count($posts)>1){ ?>s<?php } ?><br><em class="highLight"><?php echo count($posts); ?></em></div>
+                  <div class="profilNum">
+                    <span class="textFolower">Relation<?php if($userSuivi>1){ ?>s<?php } ?></span>
+                    <br>
+                    <em id="nbFollower" class="highLight"><?php echo $userSuivi; ?></em>
+                  </div>
+                  <div class="profilNum">
+                    <span>Publication<?php if(count($posts)>1){ ?>s<?php } ?></span>
+                    <br>
+                    <em class="highLight"><?php echo count($posts); ?></em>
+                  </div>
                 </div>
               </div>
               <?php if($_SESSION['id'] == $idUser){ ?> <div id="edit" class="subBtn">Éditer le profil</div> <?php } ?>
