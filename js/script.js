@@ -1,8 +1,5 @@
 $(document).ready(function()
 {
-
-
-
   $(".popupErreur, body").click(function()
   {
     $(".popupErreur").hide("drop", {direction: "up"}, 500);
