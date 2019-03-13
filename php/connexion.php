@@ -48,8 +48,7 @@
     }
     else
     {
-
-      echo($erreur);
+      header('Location: ../index.php?erreur='.$erreur);
     }
   }
 ?>

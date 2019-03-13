@@ -3,6 +3,7 @@
 <head>
   <!-- Bibliothèques -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <!-- Meta tag -->
   <meta charset="UTF-8">
@@ -136,6 +137,18 @@
       <img src="" alt="">
     </div>
   </div>
+
+  <?php if(isset($_GET["erreur"])): ?>
+    <div class="popupErreur">
+      <p>
+        <?php if($_GET["erreur"] == "mdp"): ?>
+          Erreur - Mot de passe incorrect
+        <?php else: ?>
+          Erreur - l'adresse mail n'existe pas
+        <?php endif; ?>
+      </p>
+    </div>
+  <?php endif; ?>
 
   <script src="js/script.js" type="text/javascript"></script>
   <script src="js/section-connexion.js" type="text/javascript"></script>
