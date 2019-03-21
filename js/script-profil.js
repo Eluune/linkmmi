@@ -174,7 +174,6 @@ $(document).ready(function()
       $('input').focus(function(){
         $('label').removeClass('active');
         $(this).parent().addClass('active');
-      });
         $.ajax
         ({
            url: "php/follow.php",
@@ -206,9 +205,10 @@ $(document).ready(function()
               console.log(textStatus, errorThrow);
            }
         });
-      }
+      });
     });
   }
+
 
   $('button.supprimer').click(function(){
     if($(this).parent().parent().attr('id') != 'nouveauxChamps'){
