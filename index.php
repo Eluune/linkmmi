@@ -1,8 +1,43 @@
+<?php
+  session_start();
+
+  include("bdd/config.php");
+  include("bdd/bdd.php");
+
+  // tableau avec les mois de l'année
+  $months = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+  // fuseau horraire pour les dates
+  $tz = new DateTimeZone('Europe/Paris');
+
+  if($_SESSION['idUser'] == -1)
+  {
+
+  }
+  else
+  {
+    // récupération des informations de l'utilisateur courant
+    $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
+    $resultats=$bdd->query($requete);
+    $current_user=$resultats->fetchAll(PDO::FETCH_OBJ);
+    $resultats->closeCursor();
+  }
+
+  // récupération des informations posts utilisateur
+  $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
+            FROM topic, utilisateur
+            GROUP BY topic.idTopic
+            ORDER BY topic.dateTopic DESC';
+  $resultats=$bdd->query($requete);
+  $posts=$resultats->fetchAll(PDO::FETCH_OBJ);
+  $resultats->closeCursor();
+?>
+
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
   <!-- Bibliothèques -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <!-- Meta tag -->
   <meta charset="UTF-8">
@@ -33,7 +68,7 @@
             <br>
             <input type="password" name="passwordUser" placeholder="Mot de passe">
             <br>
-            <input type="submit" value="Se connexion">
+            <input type="submit" value="Connexion">
           </form>
 
         </div> <!-- Fermeture .information -->
@@ -42,52 +77,117 @@
 
     <div class="section-center">
       <?php
-        for($i = 0; $i < 4; $i++) {
-       ?>
-      <div class="actualitées">
+        foreach ($posts as $post) {
 
-        <div class="utilisateur">
+          // récupération des informations likes post
+          $requete='SELECT idUser FROM aime WHERE idTopic='.$post->id;
+          $resultats=$bdd->query($requete);
+          $likes=$resultats->fetchAll(PDO::FETCH_OBJ);
+          $resultats->closeCursor();
 
-          <div class="photo-utilisateur">
-            <img src="img/photo-utilisateur.jpg" alt="Photo de profile de l'utilisateur">
-          </div> <!-- Fermeture .photo-utilisateur -->
+          // récupération information : user a liké le post
+          $requete='SELECT idUser FROM aime WHERE idUser='.$current_user[0]->idUser.' AND idTopic='.$post->id;
+          $resultats=$bdd->query($requete);
+          $likeExiste=$resultats->fetch();
+          $resultats->closeCursor();
 
-          <div class="info-utilisateur">
-            <h2>Marie Durant</h2>
-            <a href="#">@Marie_Drnt</a>
-          </div> <!-- Fermeture .info-utilisateur -->
+          // récupération des informations commentaires post
+          $requete='SELECT commentaire.contenuCommentaire AS "contenu", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
+                    FROM commentaire, utilisateur
+                    WHERE commentaire.idTopic='.$post->id.' AND commentaire.idUser = utilisateur.idUser
+                    ORDER BY commentaire.dateCommentaire ASC';
+          $resultats=$bdd->query($requete);
+          $commentaires=$resultats->fetchAll(PDO::FETCH_OBJ);
+          $resultats->closeCursor();
 
-        </div> <!-- Fermeture .utilisateur -->
+          // récupération des informations références post
+          $requete='SELECT tag.idTag AS "id", tag.nomTag AS "tag"
+                    FROM tag, reference
+                    WHERE reference.idTopic='.$post->id.' AND reference.idTag = tag.idTag';
+          $resultats=$bdd->query($requete);
+          $references=$resultats->fetchAll(PDO::FETCH_OBJ);
+          $resultats->closeCursor();
 
-        <p class="content-actualité">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          $dateTopic = new DateTime($post->date, $tz);
+          $date = $dateTopic->format('H\hi').' le '.intval($dateTopic->format('d')).' '.$months[intval($dateTopic->format('m'))-1].' '.$dateTopic->format('Y');
 
-        <div class="image-content">
-          <img src="img/photo-content.jpg" alt="Image de publication">
-        </div> <!-- Fermeture .image-content -->
+          ?>
+            <div class="actualitées" data-number="<?php echo $post->id; ?>">
+              <div class="utilisateur">
 
-        <p class="date-publication">Publié à <span> 12h00 le 21 janvier 2018</span> </p>
+                <figure class="photo-utilisateur">
+                  <?php
+                    if(!empty($post->imgUser) && $post->imgUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
+                    else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
+                  ?>
+                  <figcaption>
+                    <a href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>"></a>
+                  </figcaption>
+                </figure> <!-- Fermeture .photo-utilisateur -->
 
-        <i class="icofont-ui-love like"></i>
-        <p class="nb-like">300</p>
+                <div class="info-utilisateur">
+                  <h2><?php echo $post->prenom.' '.$post->nom; ?></h2>
+                  <a href="profil.php?user=<?php echo explode('#',$post->atname)[1]; ?>">@<?php echo explode('#',$post->atname)[0]; ?></a>
+                </div> <!-- Fermeture .info-utilisateur -->
 
-        <i class="icofont-speech-comments comments" data-number="<?php echo $i; ?>"></i> <!-- Remplaccer le $i par id-->
-        <p class="nb-comments">200</p>
-      </div> <!-- Fermeture .actualitées -->
+              </div> <!-- Fermeture .utilisateur -->
 
-      <div class="section-comments" id="comments-<?php echo $i; ?>"> <!-- Remplaccer le $i par id-->
+              <p class="content-actualité">
+                <?php
+                  echo $post->contenu.'<br>';
+                  foreach ($references as $ref) {
+                    ?>
+                      <a href="recherche.php?tag=<?php echo $ref->id; ?>">#<?php echo $ref->tag; ?></a>
+                    <?php
+                  }
+                ?>
+              </p>
 
-        <div class="commentaire-users">
-          <a href="#"> @Sarah_Crch </a>
-          <p>Voici mon commentaire</p>
-        </div>
+              <?php
+                if(!empty($post->imgTopic))
+                {
+                  ?>
+                    <div class="image-content">
+                      <img src="img/<?php echo $post->imgTopic; ?>" alt="Image de publication">
+                    </div>
+                  <?php
+                }
+              ?>
 
-        <div class="photo-utilisateur-comments">
-          <img src="img/photo-utilisateur.jpg" alt="Photo de profile de l'utilisateur">
-        </div> <!-- Fermeture .photo-utilisateur-comments -->
+              <p class="date-publication">Publié à <span> <?php echo $date ?></span> </p>
 
-        <input type="text" name="" placeholder="Ajouter un commentaire...">
-      </div> <!-- Fermeture .section-comments -->
-      <?php
+              <i class="icofont-ui-love like <?php if(!empty($likeExiste)){ echo 'like-active'; } ?>"></i>
+              <p class="nb-like nb-like-<?php echo $post->id; ?>"><?php echo count($likes); ?></p>
+
+              <i class="icofont-speech-comments comments" data-number="<?php echo $post->id; ?>"></i> <!-- Remplaccer le $i par id-->
+              <p class="nb-comments nb-comments-<?php echo $post->id; ?>"><?php echo count($commentaires); ?></p>
+            </div> <!-- Fermeture .actualitées -->
+
+            <div class="section-comments" id="comments-<?php echo $post->id; ?>" data-number="<?php echo $post->id; ?>"> <!-- Remplaccer le $i par id-->
+              <div class="commentaire-users">
+                <?php
+                  if(!empty($commentaires))
+                  {
+                    foreach ($commentaires as $commentaire) {
+                      ?>
+                        <a href="profil.php?user=<?php echo explode('#',$commentaire->atname)[1]; ?>">@<?php echo explode('#',$commentaire->atname)[0]; ?></a>
+                        <p><?php echo $commentaire->contenu; ?></p>
+                      <?php
+                    }
+                  }
+                ?>
+              </div>
+
+              <div class="photo-utilisateur-comments">
+                <?php
+                  if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                  else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                ?>
+              </div> <!-- Fermeture .photo-utilisateur-comments -->
+
+              <input type="text" id="text-commentaire-<?php echo $post->id; ?>" name="" placeholder="Ajouter un commentaire...">
+            </div> <!-- Fermeture .section-comments -->
+          <?php
         }
       ?>
     </div> <!-- Fermeture .section-center -->
@@ -137,9 +237,22 @@
     </div>
   </div>
 
+  <?php if(isset($_GET["erreur"])): ?>
+    <div class="popupErreur">
+      <p>
+        <?php if($_GET["erreur"] == "mdp"): ?>
+          Erreur - Mot de passe incorrect
+        <?php else: ?>
+          Erreur - l'adresse mail n'existe pas
+        <?php endif; ?>
+      </p>
+    </div>
+  <?php endif; ?>
+
   <script src="js/script.js" type="text/javascript"></script>
   <script src="js/section-connexion.js" type="text/javascript"></script>
   <script src="js/inscription.js" type="text/javascript"></script>
+  <script src="js/profil.js" type="text/javascript"></script>
 
 </body>
 </html>

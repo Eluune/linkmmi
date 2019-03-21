@@ -1,19 +1,18 @@
-$(document).ready(function() {
-  $(".comments").click(function() {
-
+$(document).ready(function()
+{
+  $(".comments").click(function()
+  {
     var number = $(this).attr("data-number");
 
-    if( $("#comments-" + number).css("display") == "none" ) {
-
+    if( $("#comments-" + number).css("display") == "none" )
+    {
       $(".section-comments").slideUp(800);
       $("#comments-" + number).slideDown(800);
-
-    }else{
-
-      $(".section-comments").slideUp(800);
-
     }
-
+    else
+    {
+      $(".section-comments").slideUp(800);
+    }
   });
 
   $(".like").click(function(){
@@ -98,20 +97,12 @@ $(document).ready(function() {
          data: { idUser_suit: idUserCurrent,
                  idUser_suivit: idUserSelected
                 },
-        success: function (response) {
-          if(response == 'ajout'){
-            $("#nbFollower").text(parseInt($("#nbFollower").text())+1);
-            if($("#nbFollower").text() == '2'){
-              $(".textFolower").text('Relations');
-            }
-          } else if(response == 'suppression'){
-            $("#nbFollower").text(parseInt($("#nbFollower").text())-1);
-            if($("#nbFollower").text() == '1'){
-              $(".textFolower").text('Relation');
-            }
-          }
-        },
-         error: function(jqXHR, textStatus, errorThrown) {
+         success: function (response)
+         {
+           $(".nb-like-"+idPost).text(response);
+         },
+         error: function(jqXHR, textStatus, errorThrown)
+         {
             console.log(textStatus, errorThrow);
          }
       });
@@ -184,6 +175,38 @@ $(document).ready(function() {
         $('label').removeClass('active');
         $(this).parent().addClass('active');
       });
+        $.ajax
+        ({
+           url: "php/follow.php",
+           type: "post",
+           data: { idUser_suit: idUserCurrent,
+                   idUser_suivit: idUserSelected
+                  },
+          success: function (response)
+          {
+            if(response == 'ajout')
+            {
+              $("#nbFollower").text(parseInt($("#nbFollower").text())+1);
+              if($("#nbFollower").text() == '2')
+              {
+                $(".textFolower").text('Relations');
+              }
+            }
+            else if(response == 'suppression')
+            {
+              $("#nbFollower").text(parseInt($("#nbFollower").text())-1);
+              if($("#nbFollower").text() == '1')
+              {
+                $(".textFolower").text('Relation');
+              }
+            }
+          },
+           error: function(jqXHR, textStatus, errorThrown)
+           {
+              console.log(textStatus, errorThrow);
+           }
+        });
+      }
     });
   }
 
