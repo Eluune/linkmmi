@@ -4,8 +4,11 @@ session_start();
 // ajouter popup modification
 
   $_SESSION['id']=1;
+  $url_posts = 'img/posts/';
+  $url_users = 'img/users/';
+  $url_bannieres = 'img/bannieres/';
 
-if(empty($_SESSION['id']))
+if(empty($_SESSION['id']) || $_SESSION['id']==-1)
 {
   header('location:index.php');
   exit;
@@ -66,7 +69,7 @@ else
   $atname = explode('#',$user[0]->atnameUser);
 
   // récupération des informations travail utilisateur
-  $requete='SELECT travaildans.idTravail AS "id", travail.villeTravail AS "ville", travail.entrepriseTravail AS "entreprise", travaildans.fonctionTravail AS "fonction"
+  $requete='SELECT travaildans.idTravailDans AS "id", travaildans.debutTravail AS "debut", travaildans.finTravail AS "fin", travail.villeTravail AS "ville", travail.entrepriseTravail AS "entreprise", travaildans.fonctionTravail AS "fonction", travaildans.idTravail AS "idTravail"
             FROM travaildans, travail
             WHERE travaildans.idUser='.$idUser.' AND travaildans.idTravail = travail.idTravail
             ORDER BY travaildans.debutTravail DESC';
@@ -141,7 +144,7 @@ else
         <div class="blcNav">
             <figure id="data-user" data-number="<?php echo $current_user[0]->idUser; ?>">
               <?php
-                if(!empty($current_user[0]->photoUser && $current_user[0]->photoUser != 'NULL')) { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                if(!empty($current_user[0]->photoUser && $current_user[0]->photoUser != 'NULL')) { ?> <img src="<?php echo $url_users.$current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
                 else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
               ?>
               <figcaption>
@@ -153,7 +156,7 @@ else
                 <input type="text" placeholder="Rechercher">
             </form>
         </div>
-            <button class="btn-Icone active"><i class="icofont-link"></i></button>
+        <button class="btn-Icone active"><i class="icofont-link"></i></button>
         <div class="blcNav">
             <button class="btn-Icone active"><i class="icofont-home"></i></button>
             <button class="btn-Icone"><i class="icofont-wechat"></i></button>
@@ -164,7 +167,7 @@ else
 
     <div class="content">
         <?php
-          if(!empty($user[0]->banniereUser) && $user[0]->banniereUser != 'NULL') { ?> <img src="<?php echo $user[0]->banniereUser; ?>" class="banniere"> <?php }
+          if(!empty($user[0]->banniereUser) && $user[0]->banniereUser != 'NULL') { ?> <img src="<?php echo $url_bannieres.$user[0]->banniereUser; ?>" class="banniere"> <?php }
           else { ?> <img src="img-placeholder/bestLoutre.jpg" alt="" class="banniere"> <?php }
         ?>
 
@@ -172,7 +175,7 @@ else
         <div class="profil">
             <div class="profilPictContainer">
               <?php
-                if(!empty($user[0]->photoUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $user[0]->photoUser; ?>" class="profilPict"> <?php }
+                if(!empty($user[0]->photoUser) && $user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $url_users.$user[0]->photoUser; ?>" class="profilPict"> <?php }
                 else { ?> <img src="img-placeholder/bestLoutre.jpg" class="profilPict"> <?php }
               ?>
               <?php
@@ -211,7 +214,7 @@ else
                   {
                     foreach ($travails as $travail)
                     {
-                      echo '<p>'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></p>';
+                      echo '<p class="travail-'.$travail->id.'">'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></p>';
                     }
                   }
                 ?>
@@ -276,7 +279,7 @@ else
 
                     <figure class="photo-utilisateur">
                       <?php
-                        if(!empty($post->imgUser) && $post->imgUser != 'NULL') { ?> <img src="<?php echo $post->imgUser; ?>" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
+                        if(!empty($post->imgUser) && $post->imgUser != 'NULL') { ?> <img src="<?php echo $url_users.$post->imgUser; ?>" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
                         else { ?> <img src="img-placeholder/bestLoutre.jpg" class="authorPict" alt="Photo de profil de <?php echo $post->prenom.' '.$post->nom; ?>"> <?php }
                       ?>
                       <figcaption>
@@ -307,7 +310,7 @@ else
                     {
                       ?>
                         <div class="image-content">
-                          <img src="img/<?php echo $post->imgTopic; ?>" alt="Image de publication">
+                          <img src="<?php echo $url_posts.$post->imgTopic; ?>" alt="Image de publication">
                         </div>
                       <?php
                     }
@@ -339,7 +342,7 @@ else
 
                   <div class="photo-utilisateur-comments">
                     <?php
-                      if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                      if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $url_users.$current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
                       else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
                     ?>
                   </div> <!-- Fermeture .photo-utilisateur-comments -->
@@ -388,6 +391,133 @@ else
 
             <em class="highLight">LinkMMI © 2019</em>
         </div>
+    </div>
+
+    <div class="edit">
+      <div class="popup-edit">
+        <button class="close"><i class="icofont-ui-close"></i></button>
+        <h2>Editer le profil</h2>
+
+        <div class="categorie">
+          <div class="popup-titres">
+            <div class="popup-titre-single active" id="popup-infosClassiques">
+              <span>Informations publiques</span>
+            </div>
+            <div class="popup-titre-single" id="popup-infosImages">
+              <span>Images</span>
+            </div>
+            <div class="popup-titre-single" id="popup-infosTravails">
+              <span>Détails</span>
+            </div>
+            <div class="popup-titre-single" id="popup-infosPrivees">
+              <span>Informations privées</span>
+            </div>
+          </div>
+
+          <div class="popup-contents active" id="content-popup-infosClassiques">
+            <form method="post" action="php/modification.php">
+              <div class="ligne ligne-4">
+                <label for="popup-prenomUser">Prénom
+                  <input type="text" name="prenomUser" id="popup-prenomUser" value="<?php echo $current_user[0]->prenomUser; ?>" />
+                </label>
+                <label for="popup-nomUser">Nom
+                  <input type="text" name="nomUser" id="popup-nomUser" value="<?php echo $current_user[0]->nomUser; ?>" />
+                </label>
+                <label for="popup-birthdayUser">Anniversaire
+                  <input type="date" name="birthdayUser" id="popup-birthdayUser" value="<?php echo $current_user[0]->birthdayUser; ?>" />
+                </label>
+                <label for="popup-portfolioUser">Portfolio
+                  <input type="text" name="portfolioUser" id="popup-portfolioUser" value="<?php echo $current_user[0]->portfolioUser; ?>" />
+                </label>
+              </div>
+              <div class="ligne ligne-1">
+                <label for="popup-descriptionUser">Description
+                  <input type="text" name="descriptionUser" id="popup-descriptionUser" value="<?php echo $current_user[0]->descriptionUser ?>" />
+                </label>
+              </div>
+              <button type="submit" name="infosClassiques" id="btn-popup-infosClassiques"><span>Mettre à jour</span></button>
+            </form>
+          </div>
+
+          <div class="popup-contents" id="content-popup-infosImages">
+            <form method="post" action="php/modification.php" enctype="multipart/form-data">
+              <div class="ligne ligne-2">
+                <label for="popup-photoUser">Image de profil
+                  <input type="file" name="photoUser" id="popup-photoUser" />
+                </label>
+                <label for="popup-banniereUser">Image de bannière
+                  <input type="file" name="banniereUser" id="popup-banniereUser" />
+                </label>
+              </div>
+              <button type="submit" name="infosImages" id="btn-popup-infosImages"><span>Mettre à jour</span></button>
+            </form>
+          </div>
+
+          <div class="popup-contents" id="content-popup-infosTravails">
+            <form method="post" action="php/modification.php">
+              <div class="container">
+                <?php
+                  if(!empty($travails))
+                  {
+                    $i = 0;
+                    foreach ($travails as $travail)
+                    {
+                      $i++;
+                      ?>
+                      <div class="ligne ligne-6 in-database">
+                        <label for="popup-debutTravail">Date de début
+                          <input type="date" name="debutTravail-<?php echo $i; ?>" id="popup-debutTravail-<?php echo $i; ?>" value="<?php echo $travail->debut; ?>" />
+                        </label>
+                        <label for="popup-finTravail">Date de fin
+                          <input type="date" name="finTravail-<?php echo $i; ?>" id="popup-finTravail-<?php echo $i; ?>" value="<?php echo $travail->fin; ?>" />
+                        </label>
+                        <label for="popup-fonctionTravail">Poste
+                          <input type="text" name="fonctionTravail-<?php echo $i; ?>" id="popup-fonctionTravail-<?php echo $i; ?>" value="<?php echo $travail->fonction; ?>" />
+                        </label>
+                        <label for="popup-entrepriseTravail">Entreprise
+                          <input type="text" name="entrepriseTravail-<?php echo $i; ?>" id="popup-entrepriseTravail-<?php echo $i; ?>" value="<?php echo $travail->entreprise; ?>" />
+                        </label>
+                        <label for="popup-villeTravail">Ville
+                          <input type="text" name="villeTravail-<?php echo $i; ?>" id="popup-villeTravail-<?php echo $i; ?>" value="<?php echo $travail->ville; ?>" />
+                        </label>
+                        <input type="hidden" name="idTravail-<?php echo $i; ?>" value="<?php echo $travail->idTravail; ?>" />
+                        <input type="hidden" name="id-<?php echo $i; ?>" value="<?php echo $travail->id; ?>" />
+                        <button class="supprimer" type="button" data-number="<?php echo $travail->id; ?>"><span>Supprimer</span></button>
+                      </div>
+                      <?php
+                    }
+                  }
+                ?>
+                <input type="hidden" name="nbOldTravails" id="nbOldTravails" value="<?php echo count($travails); ?>" />
+                <div id="nouveauxChamps"></div>
+                <div class="ligne ligne-6">
+                  <button class="newField" type="button" data-number="0"><span>Ajouter</span></button>
+                </div>
+              </div>
+              <input type="hidden" name="nbNewTravails" id="nbNewTravails" value="0" />
+              <button type="submit" name="infosTravails" id="btn-popup-infosTravails"><span>Mettre à jour</span></button>
+            </form>
+          </div>
+
+          <div class="popup-contents" id="content-popup-infosPrivees">
+            <form method="post" action="php/modification.php">
+              <div class="ligne ligne-3">
+                <label for="popup-mailUser">Mail
+                  <input type="mail" name="mailUser" id="popup-mailUser" value="<?php echo $current_user[0]->mailUser; ?>" />
+                </label>
+                <label for="popup-passwordUser1">Ancien mot de passe
+                  <input type="password" name="passwordOld" id="popup-passwordUserOld" />
+                </label>
+                <label for="popup-passwordUser2">Nouveau mot de passe
+                  <input type="password" name="passwordNew" id="popup-passwordUserNew" />
+                </label>
+              </div>
+              <button type="submit" name="infosPrivees" id="btn-popup-infosPrivees"><span>Mettre à jour</span></button>
+            </form>
+          </div>
+
+        </div>
+      </div>
     </div>
 
     <script src="js/script-profil.js" type="text/javascript"></script>

@@ -5,6 +5,8 @@ $black : #4A4A4A;
 $border-grey : #d5d5d5;
 $dark-grey : rgba(213, 213, 213, 1);
 $border-darkgrey : rgba(150, 150, 150, 1);
+$red : #ff6b6b;
+
 %shadow {
     box-shadow: 0px 6px 10px -5px rgba(0, 0, 0, 0.15);
 }
@@ -99,6 +101,7 @@ nav{
               position: absolute;
               top: 0; left: 0;
               width: 100%; height: 100%;
+              object-fit: cover;
             }
 
             figcaption, a{
@@ -181,6 +184,7 @@ nav{
                 width: 200px;
                 border-radius: 50%;
                 transform: translate(0%,-50%);
+                object-fit: cover;
             }
             button{
                 position: absolute;
@@ -236,7 +240,7 @@ nav{
                 &.friends:hover{
                   border: 1px solid red;
                   background-color: white;
-                  color: red;
+                  color: $red;
                 }
 
                 &.friends::after{
@@ -642,4 +646,273 @@ nav{
             }
         }
     }
+}
+
+
+.edit{
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(46, 49, 49, .6);
+  display: flex;
+  z-index: 1000;
+  color: white;
+  display: none;
+
+  &.active{
+    display: block;
+  }
+
+  .popup-edit{
+    position: absolute;
+    top: 15%; left: 15%;
+    width: 70%;
+    border-radius: 0.5em;
+    background-color: $grey;
+    padding: 15px 20px;
+    z-index: 1001;
+
+    &::before{
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      background-color: $yellow;
+      width: 100%;
+      height: 130px;
+      border-radius: .5em .5em 0 0;
+      z-index: -1;
+    }
+
+    h2{
+      position: absolute;
+      top: 10px; left: 20px;
+      z-index: 1001;
+      color: white;
+    }
+
+    .categorie{
+      width: calc(100% - 15px);
+      margin: 60px auto 20px;
+      color: black;
+      background-color: white;
+      border-radius: .5em;
+      display: flex;
+      flex-direction: column;
+      z-index: 1002;
+      overflow: hidden;
+
+      button[type="submit"]{
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 40px;
+        border: 1px solid $blue;
+        background-color: white;
+        color: white;
+        padding: 5px 10px;
+        border-radius: .5em;
+        color: $blue;
+        width: 200px; height: 30px;
+        font-size: 1.2vw;
+        transition: .3s ease all;
+        cursor: pointer;
+
+        span{
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
+        }
+
+        &:hover{
+          background-color: $blue;
+          color: white;
+        }
+      }
+
+      .popup-titres{
+        position: relative;
+        display: flex;
+        flex-direction: row;
+
+        .popup-titre-single{
+          position: relative;
+          width: calc(100% / 4); height: 35px;
+          color: black;
+          background-color: $grey;
+          cursor: pointer;
+          transition: .3s ease background-color;
+          font-size: 1.2vw;
+
+          &:hover{
+            background-color: $dark-grey;
+          }
+
+          &:not(:last-child){
+            border-right: 1px solid $dark-grey;
+          }
+
+          &.active{
+            background-color: white;
+            cursor: default;
+          }
+
+          span{
+            display: block;
+            width: 100%;
+            text-align: center;
+            line-height: 35px;
+          }
+        }
+      }
+
+      .popup-contents{
+        display: none;
+        font-size: 1vw;
+
+        &.active{
+          display: block;
+          padding: 15px 20px;
+        }
+
+        .ligne{
+          display: flex;
+          flex-direction: row;
+          margin: 8px 0;
+        }
+
+        label{
+          font-weight: bold;
+          position: relative;
+
+          input{
+            border: none;
+            padding-left: 1.5px;
+            margin: 6px 5px;
+            font-weight: normal;
+            font-size: .9vw;
+            background-color: white;
+            width: calc(100% - 25px);
+          }
+
+          &::after{
+            position: absolute;
+            content: '';
+            background-color: black;
+            width: 0; height: 2px;
+            bottom: 2px; left: 50%;
+            transition: .3s ease all;
+          }
+
+          &.active{
+            &::after{
+              width: calc(100% - 15px);
+              left: 0;
+            }
+          }
+        }
+
+        &#content-popup-infosImages{
+          label{
+            &.active{
+              &::after{
+                width: 0;
+                left: 0;
+              }
+            }
+          }
+        }
+
+        &#content-popup-infosTravails{
+          button.supprimer{
+            position: relative;
+            width: 100px;
+            height: 25px;
+            margin: auto 0;
+            background-color: white;
+            border-radius: .5em;
+            border: 1px solid $blue;
+            color: $blue;
+            cursor: pointer;
+
+            &:hover{
+              border: 1px solid $red;
+              color: $red;
+            }
+          }
+
+          button.newField{
+            position: relative;
+            width: 100px;
+            height: 25px;
+            margin: auto 0;
+            background-color: white;
+            border-radius: .5em;
+            border: 1px solid $yellow;
+            color: $yellow;
+            cursor: pointer;
+            transition: .3s ease;
+
+            &:hover{
+              background-color: $yellow;
+              color: white;
+            }
+          }
+
+          .container{
+            width: 100%; max-height: 200px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+          }
+        }
+
+        .ligne-1{
+          label{
+            width: calc(100%);
+          }
+        }
+
+        .ligne-2{
+          label{
+            width: calc(100% / 2);
+          }
+        }
+
+        .ligne-3{
+          label{
+            width: calc(100% / 3);
+          }
+        }
+
+        .ligne-4{
+          label{
+            width: calc(100% / 4);
+          }
+        }
+
+        .ligne-6{
+          label{
+            width: calc(100% / 6);
+          }
+        }
+      }
+    }
+
+    button.close{
+      position: absolute;
+      top: -10px; right: -10px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background-color: #191817;
+      border: none;
+      cursor: pointer;
+
+      i{
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%);
+        color: white;
+      }
+    }
+
+  }
 }
