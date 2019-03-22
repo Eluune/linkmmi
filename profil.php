@@ -148,7 +148,6 @@ else
                 <a href="profil.php"></a>
               </figcaption>
             </figure>
-            <button class="btn-Y-R">Poster</button>
             <form action="" method="post">
                 <input type="text" placeholder="Rechercher">
             </form>

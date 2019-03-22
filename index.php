@@ -1,5 +1,8 @@
 <?php
   session_start();
+  //session_destroy();
+
+  //$_SESSION['id']=1;
 
   include("bdd/config.php");
   include("bdd/bdd.php");
@@ -9,17 +12,17 @@
   // fuseau horraire pour les dates
   $tz = new DateTimeZone('Europe/Paris');
 
-  if($_SESSION['idUser'] == -1)
-  {
-
-  }
-  else
+  if(isset($_SESSION["idUser"]))
   {
     // récupération des informations de l'utilisateur courant
-    $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
+    $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["idUser"];
     $resultats=$bdd->query($requete);
     $current_user=$resultats->fetchAll(PDO::FETCH_OBJ);
     $resultats->closeCursor();
+  }
+  else
+  {
+    $_SESSION["idUser"] = -1;
   }
 
   // récupération des informations posts utilisateur
@@ -54,6 +57,34 @@
 
 <body>
 
+
+  <!--- Menu -->
+  <?php if($_SESSION["idUser"] != -1): ?>
+      <nav>
+          <div class="blcNav">
+              <figure id="data-user" data-number="<?php echo $current_user[0]->idUser; ?>">
+                <?php
+                  if(!empty($current_user[0]->photoUser && $current_user[0]->photoUser != 'NULL')) { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                  else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                ?>
+                <figcaption>
+                  <a href="profil.php"></a>
+                </figcaption>
+              </figure>
+              <form action="" method="post">
+                  <input type="text" placeholder="Rechercher">
+              </form>
+          </div>
+              <button class="btn-Icone active"><i class="icofont-link"></i></button>
+          <div class="blcNav">
+              <button class="btn-Icone active"><i class="icofont-home"></i></button>
+              <button class="btn-Icone"><i class="icofont-wechat"></i></button>
+              <button class="btn-Icone"><i class="icofont-heart-alt"></i></button>
+          </div>
+      </nav>
+    <?php endif; ?>
+    <!-- Fin menu -->
+
   <div class="section-connexion">
 
     <div class="section-left">
@@ -85,11 +116,14 @@
           $likes=$resultats->fetchAll(PDO::FETCH_OBJ);
           $resultats->closeCursor();
 
-          // récupération information : user a liké le post
-          $requete='SELECT idUser FROM aime WHERE idUser='.$current_user[0]->idUser.' AND idTopic='.$post->id;
-          $resultats=$bdd->query($requete);
-          $likeExiste=$resultats->fetch();
-          $resultats->closeCursor();
+          if($_SESSION["idUser"] != -1)
+          {
+            // récupération information : user a liké le post
+            $requete='SELECT idUser FROM aime WHERE idUser='.$current_user[0]->idUser.' AND idTopic='.$post->id;
+            $resultats=$bdd->query($requete);
+            $likeExiste=$resultats->fetch();
+            $resultats->closeCursor();
+          }
 
           // récupération des informations commentaires post
           $requete='SELECT commentaire.contenuCommentaire AS "contenu", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
@@ -180,8 +214,8 @@
 
               <div class="photo-utilisateur-comments">
                 <?php
-                  if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
-                  else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                  if(!empty($current_user[0]->photoUser) && $current_user[0]->photoUser != 'NULL') { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php //echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                  else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php //echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
                 ?>
               </div> <!-- Fermeture .photo-utilisateur-comments -->
 
@@ -252,7 +286,6 @@
   <script src="js/script.js" type="text/javascript"></script>
   <script src="js/section-connexion.js" type="text/javascript"></script>
   <script src="js/inscription.js" type="text/javascript"></script>
-  <script src="js/profil.js" type="text/javascript"></script>
 
-</body>
+  </body>
 </html>
