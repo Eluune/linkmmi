@@ -62,13 +62,13 @@ PRIMARY KEY (idUser,
  idConversation)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS travaildans ;
-CREATE TABLE travaildans (idUser BIGINT(8) AUTO_INCREMENT NOT NULL,
+CREATE TABLE travaildans (idTravailDans BIGINT(8) AUTO_INCREMENT NOT NULL,
+idUser BIGINT(8) NOT NULL,
 idTravail BIGINT(8) NOT NULL,
 debutTravail DATE,
 finTravail DATE,
 fonctionTravail TEXT,
-PRIMARY KEY (idUser,
- idTravail)) ENGINE=InnoDB;
+PRIMARY KEY (idTravailDans)) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS aime ;
 CREATE TABLE aime (idTopic BIGINT(8) AUTO_INCREMENT NOT NULL,
