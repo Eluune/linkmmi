@@ -1,4 +1,5 @@
 <?php
+session_start();
 
   /* ------------------------------------------------------ *\
    * Créer un topic - Edit un topic - Supprimer un topic
@@ -21,8 +22,7 @@
 
   $date = date("Y-m-d H:i:s");
   $idUser = $_SESSION['id']; // id utilisateur
-  $folder = './img/'; // lien du fichier qui reçoit l'image
-  $homePage = '../index.php'; //  lien de la page d'accueil
+  $folder = '../img/posts/'; // lien du fichier qui reçoit l'image
 
   include("../bdd/config.php");
   include("../bdd/bdd.php");
@@ -45,10 +45,9 @@
     $idTopic=$resultats->fetch();
     $resultats->closeCursor();
 
-    // insérer les images
-    if($_FILES['imgTopic']['error'] == 0)
+    if(isset($_FILES['imgTopic']) && $_FILES['imgTopic']['error'] == 0)
     {
-      if($_FILES['imgTopic']['size'] < 1000000)
+      if($_FILES['imgTopic']['size'] <= 10000000)
       {
         $infosfichier = pathinfo($_FILES['imgTopic']['name']);
         $extension_upload = $infosfichier['extension'];
@@ -70,7 +69,7 @@
     // insertion des tags entrés : création des nouveaux tags et référencement du topic
     if(!empty($_POST['tagsTopic']))
     {
-      $tagsInit = explode('',$_POST['tagsTopic']);
+      $tagsInit = explode(' ',$_POST['tagsTopic']);
       $tagsEntres = array_unique($tagsInit);
 
       foreach($tagsEntres as $newTag)
@@ -79,10 +78,10 @@
         $increment = 0;
         do
         {
-          if($newTag == tags[$increment]->nomTag)
+          if($newTag == $tags[$increment]->nomTag)
           {
             $existant = true;
-            $idTag = tags[$increment]->idTag;
+            $idTag = $tags[$increment]->idTag;
           }
           $increment++;
         }
@@ -109,7 +108,7 @@
       }
     }
 
-    header('location: '.$homePage);
+    header('location:'.$_SERVER['HTTP_REFERER']);
     exit;
   }
   else if(isset($_POST['update']))
@@ -119,7 +118,7 @@
     $topicInit=$resultats->fetchAll(PDO::FETCH_OBJ);
     $resultats->closeCursor();
     // si le contenu est modifié
-    if($topicInit[0]->contenuTopic != $_POST['contenuTopic'] &&)
+    if($topicInit[0]->contenuTopic != $_POST['contenuTopic'])
     {
       $requete = $bdd->prepare("UPDATE topic SET contenuTopic = :contenuTopic, editTopic = :editTopic WHERE idTopic = :idTopic");
       $requete->bindParam(':contenuTopic', $_POST['contenuTopic']);
@@ -153,7 +152,7 @@
       }
     }
 
-    header('location: '.$homePage);
+    header('location:../');
     exit;
   }
   else if(isset($_POST['delete']))
@@ -185,11 +184,14 @@
     else
     {
       // retourne erreur : vous ne pouvez pas supprimer ce topic
-      header('location: '.$homePage?'?erreur=user');
+      header('location:../?erreur=user');
       exit;
     }
-    header('location: '.$homePage.'?delete=ok'); // le topic a bien été supprimé
+    header('location:../?delete=ok'); // le topic a bien été supprimé
     exit;
   }
+
+  header('location:../');
+  exit;
 
 ?>

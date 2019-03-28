@@ -1,4 +1,5 @@
 <?php
+session_start();
   /*
   * connexion.php
   * - récupère et compare les données fournies par l'utilisateur et la bdd
@@ -28,9 +29,8 @@
       {
         if($_POST["passwordUser"] == $utilisateurs[$i]->passwordUser)
         {
-          session_start();
-          $_SESSION["mailUser"] = $utilisateurs[$i]->mailUser;
-          $_SESSION["idUser"] = $utilisateurs[$i]->idUser;
+          $_SESSION["mail"] = $utilisateurs[$i]->mailUser;
+          $_SESSION["id"] = $utilisateurs[$i]->idUser;
           $connexion = true;
         }
         else
@@ -44,11 +44,11 @@
 
     if($connexion)
     {
-      header('Location: ../profil.php');
+      header('Location: ../');
     }
     else
     {
-      header('Location: ../index.php?erreur='.$erreur);
+      header('Location: ../?erreur='.$erreur);
     }
   }
 ?>

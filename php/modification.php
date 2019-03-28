@@ -33,155 +33,205 @@ session_start();
   $url_users = '../img/users/';
   $url_bannieres = '../img/bannieres/';
 
-  if(!empty($_SESSION['id'] && $_SESSION['id']!=-1))
+  if(isset($_SESSION['id']))
   {
     $requete='SELECT * FROM utilisateur WHERE idUser='.$_SESSION["id"];
     $resultats=$bdd->query($requete);
     $user=$resultats->fetchAll(PDO::FETCH_OBJ);
     $resultats->closeCursor();
 
-    if(isset($_POST['infosClassiques']))
+    if(!empty($user))
     {
 
-      if($_POST["prenomUser"] != $user[0]->prenomUser)
+      if(isset($_POST['infosClassiques']))
       {
-        $requete = $bdd->prepare("UPDATE utilisateur SET prenomUser = :prenom WHERE idUser = :id");
-        $requete->bindParam(':prenom', $_POST["prenomUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
-        $requete->execute();
-      }
 
-      if($_POST["nomUser"] != $user[0]->nomUser)
-      {
-        $requete = $bdd->prepare("UPDATE utilisateur SET nomUser = :nom WHERE idUser = :id");
-        $requete->bindParam(':nom', $_POST["nomUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
-        $requete->execute();
-      }
-
-      if($_POST["birthdayUser"] != $user[0]->birthdayUser)
-      {
-        $requete = $bdd->prepare("UPDATE utilisateur SET birthdayUser = :birthday WHERE idUser = :id");
-        $requete->bindParam(':birthday', $_POST["birthdayUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
-        $requete->execute();
-      }
-
-      if($_POST["portfolioUser"] != $user[0]->portfolioUser)
-      {
-        $requete = $bdd->prepare("UPDATE utilisateur SET portfolioUser = :portfolio WHERE idUser = :id");
-        $requete->bindParam(':portfolio', $_POST["portfolioUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
-        $requete->execute();
-      }
-
-      if($_POST["descriptionUser"] != $user[0]->descriptionUser)
-      {
-        $requete = $bdd->prepare("UPDATE utilisateur SET descriptionUser = :description WHERE idUser = :id");
-        $requete->bindParam(':description', $_POST["descriptionUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
-        $requete->execute();
-      }
-
-    }
-    else if(isset($_POST['infosImages']))
-    {
-
-      $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
-
-      if(isset($_FILES['photoUser']) AND $_FILES['photoUser']['error'] == 0){
-        if($_FILES['photoUser']['size'] <= 10000000){
-          $infosfichier = pathinfo($_FILES['photoUser']['name']);
-          $extension_upload = $infosfichier['extension'];
-
-          if(in_array($extension_upload, $extensions_autorisees)){
-            if(!empty($user[0]->photoUser)){
-                unlink ($url_users.$user[0]->photoUser);
-            }
-
-            $url = time().''.$_FILES['photoUser']['name'];
-            move_uploaded_file($_FILES['photoUser']['tmp_name'], $url_users . basename($url));
-
-            $requete = $bdd->prepare("UPDATE utilisateur SET photoUser = :photo WHERE idUser = :id");
-            $requete->bindParam(':photo', $url);
-            $requete->bindParam(':id', $_SESSION["id"]);
-            $requete->execute();
-          }
-        }
-      }
-
-      if(isset($_FILES['banniereUser']) AND $_FILES['banniereUser']['error'] == 0){
-        if($_FILES['banniereUser']['size'] <= 10000000){
-          $infosfichier = pathinfo($_FILES['banniereUser']['name']);
-          $extension_upload = $infosfichier['extension'];
-
-          if(in_array($extension_upload, $extensions_autorisees)){
-            if(!empty($user[0]->banniereUser)){
-                unlink ($url_bannieres.$user[0]->banniereUser);
-            }
-
-            $url = time().''.$_FILES['banniereUser']['name'];
-            move_uploaded_file($_FILES['banniereUser']['tmp_name'], $url_bannieres . basename($url));
-
-            $requete = $bdd->prepare("UPDATE utilisateur SET banniereUser = :photo WHERE idUser = :id");
-            $requete->bindParam(':photo', $url);
-            $requete->bindParam(':id', $_SESSION["id"]);
-            $requete->execute();
-          }
-        }
-      }
-    }
-    else if(isset($_POST['infosTravails']))
-    {
-      $increment = 0;
-      for($i=0; $i<$_POST['nbOldTravails']; $i++)
-      {
-        $increment++;
-        $find = false;
-
-        do
+        if($_POST["prenomUser"] != $user[0]->prenomUser)
         {
-          if(!empty($_POST['id-'.$increment]))
+          $requete = $bdd->prepare("UPDATE utilisateur SET prenomUser = :prenom WHERE idUser = :id");
+          $requete->bindParam(':prenom', $_POST["prenomUser"]);
+          $requete->bindParam(':id', $_SESSION["id"]);
+          $requete->execute();
+        }
+
+        if($_POST["nomUser"] != $user[0]->nomUser)
+        {
+          $requete = $bdd->prepare("UPDATE utilisateur SET nomUser = :nom WHERE idUser = :id");
+          $requete->bindParam(':nom', $_POST["nomUser"]);
+          $requete->bindParam(':id', $_SESSION["id"]);
+          $requete->execute();
+        }
+
+        if($_POST["birthdayUser"] != $user[0]->birthdayUser)
+        {
+          $requete = $bdd->prepare("UPDATE utilisateur SET birthdayUser = :birthday WHERE idUser = :id");
+          $requete->bindParam(':birthday', $_POST["birthdayUser"]);
+          $requete->bindParam(':id', $_SESSION["id"]);
+          $requete->execute();
+        }
+
+        if($_POST["portfolioUser"] != $user[0]->portfolioUser)
+        {
+          $requete = $bdd->prepare("UPDATE utilisateur SET portfolioUser = :portfolio WHERE idUser = :id");
+          $requete->bindParam(':portfolio', $_POST["portfolioUser"]);
+          $requete->bindParam(':id', $_SESSION["id"]);
+          $requete->execute();
+        }
+
+        if($_POST["descriptionUser"] != $user[0]->descriptionUser)
+        {
+          $requete = $bdd->prepare("UPDATE utilisateur SET descriptionUser = :description WHERE idUser = :id");
+          $requete->bindParam(':description', $_POST["descriptionUser"]);
+          $requete->bindParam(':id', $_SESSION["id"]);
+          $requete->execute();
+        }
+
+      }
+      else if(isset($_POST['infosImages']))
+      {
+
+        $extensions_autorisees = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+
+        if(isset($_FILES['photoUser']) && $_FILES['photoUser']['error'] == 0){
+          if($_FILES['photoUser']['size'] <= 10000000){
+            $infosfichier = pathinfo($_FILES['photoUser']['name']);
+            $extension_upload = $infosfichier['extension'];
+
+            if(in_array($extension_upload, $extensions_autorisees)){
+              if(!empty($user[0]->photoUser)){
+                  unlink ($url_users.$user[0]->photoUser);
+              }
+
+              $url = time().''.$_FILES['photoUser']['name'];
+              move_uploaded_file($_FILES['photoUser']['tmp_name'], $url_users . basename($url));
+
+              $requete = $bdd->prepare("UPDATE utilisateur SET photoUser = :photo WHERE idUser = :id");
+              $requete->bindParam(':photo', $url);
+              $requete->bindParam(':id', $_SESSION["id"]);
+              $requete->execute();
+            }
+          }
+        }
+
+        if(isset($_FILES['banniereUser']) && $_FILES['banniereUser']['error'] == 0){
+          if($_FILES['banniereUser']['size'] <= 10000000){
+            $infosfichier = pathinfo($_FILES['banniereUser']['name']);
+            $extension_upload = $infosfichier['extension'];
+
+            if(in_array($extension_upload, $extensions_autorisees)){
+              if(!empty($user[0]->banniereUser)){
+                  unlink ($url_bannieres.$user[0]->banniereUser);
+              }
+
+              $url = time().''.$_FILES['banniereUser']['name'];
+              move_uploaded_file($_FILES['banniereUser']['tmp_name'], $url_bannieres . basename($url));
+
+              $requete = $bdd->prepare("UPDATE utilisateur SET banniereUser = :photo WHERE idUser = :id");
+              $requete->bindParam(':photo', $url);
+              $requete->bindParam(':id', $_SESSION["id"]);
+              $requete->execute();
+            }
+          }
+        }
+      }
+      else if(isset($_POST['infosTravails']))
+      {
+        $increment = 0;
+        for($i=0; $i<$_POST['nbOldTravails']; $i++)
+        {
+          $increment++;
+          $find = false;
+
+          do
           {
-            $find = true;
-
-            $requete='SELECT travaildans.idTravailDans AS "id", travaildans.debutTravail AS "debutTravail", travaildans.finTravail AS "finTravail", travail.villeTravail AS "villeTravail", travail.entrepriseTravail AS "entrepriseTravail", travaildans.fonctionTravail AS "fonctionTravail"
-                      FROM travaildans, travail
-                      WHERE travaildans.idTravail = '.$_POST["id-".$increment].'
-                      ORDER BY travaildans.debutTravail DESC';
-            $resultats=$bdd->query($requete);
-            $travail=$resultats->fetchAll(PDO::FETCH_OBJ);
-            $resultats->closeCursor();
-
-            if($_POST['debutTravail-'.$increment] != $travail[0]->debutTravail)
+            if(isset($_POST['id-'.$increment]))
             {
-              $requete = $bdd->prepare("UPDATE travaildans SET debutTravail = :debutTravail WHERE idTravailDans = :id");
-              $requete->bindParam(':debutTravail', $_POST['debutTravail-'.$increment]);
-              $requete->bindParam(':id', $_POST["id-".$increment]);
-              $requete->execute();
+              $find = true;
+
+              $requete='SELECT travaildans.idTravailDans AS "id", travaildans.debutTravail AS "debutTravail", travaildans.finTravail AS "finTravail", travail.villeTravail AS "villeTravail", travail.entrepriseTravail AS "entrepriseTravail", travaildans.fonctionTravail AS "fonctionTravail"
+                        FROM travaildans, travail
+                        WHERE travaildans.idTravailDans = '.$_POST["id-".$increment].' AND travaildans.idUser = '.$_SESSION['id'].' AND travaildans.idTravail = travail.idTravail
+                        ORDER BY travaildans.debutTravail DESC';
+              $resultats=$bdd->query($requete);
+              $travail=$resultats->fetchAll(PDO::FETCH_OBJ);
+              $resultats->closeCursor();
+
+              if($_POST['debutTravail-'.$increment] != $travail[0]->debutTravail)
+              {
+                $requete = $bdd->prepare("UPDATE travaildans SET debutTravail = :debutTravail WHERE idTravailDans = :id");
+                $requete->bindParam(':debutTravail', $_POST['debutTravail-'.$increment]);
+                $requete->bindParam(':id', $_POST["id-".$increment]);
+                $requete->execute();
+              }
+
+              if($_POST['finTravail-'.$increment] != $travail[0]->debutTravail)
+              {
+                $requete = $bdd->prepare("UPDATE travaildans SET finTravail = :finTravail WHERE idTravailDans = :id");
+                $requete->bindParam(':finTravail', $_POST['finTravail-'.$increment]);
+                $requete->bindParam(':id', $_POST["id-".$increment]);
+                $requete->execute();
+              }
+
+              if($_POST['fonctionTravail-'.$increment] != $travail[0]->fonctionTravail)
+              {
+                $requete = $bdd->prepare("UPDATE travaildans SET fonctionTravail = :fonctionTravail WHERE idTravailDans = :id");
+                $requete->bindParam(':fonctionTravail', $_POST['fonctionTravail-'.$increment]);
+                $requete->bindParam(':id', $_POST["id-".$increment]);
+                $requete->execute();
+              }
+
+              if($_POST['entrepriseTravail-'.$increment] != $travail[0]->entrepriseTravail || $_POST['villeTravail-'.$increment] != $travail[0]->villeTravail)
+              {
+                $requete='SELECT idTravail
+                          FROM travail
+                          WHERE entrepriseTravail LIKE "'.$_POST['entrepriseTravail-'.$increment].'" AND villeTravail LIKE "'.$_POST['villeTravail-'.$increment].'"';
+                $resultats=$bdd->query($requete);
+                $entreprise=$resultats->fetchAll(PDO::FETCH_OBJ);
+                $resultats->closeCursor();
+
+                if(empty($entreprise))
+                {
+                  $requete = $bdd->prepare("INSERT INTO travail (entrepriseTravail, villeTravail) VALUES (:entreprise, :ville)");
+                  $requete->bindParam(':entreprise', $_POST["entrepriseTravail-".$increment]);
+                  $requete->bindParam(':ville', $_POST["villeTravail-".$increment]);
+                  $requete->execute();
+
+                  $requete='SELECT idTravail
+                            FROM travail
+                            WHERE entrepriseTravail LIKE "'.$_POST['entrepriseTravail-'.$increment].'" AND villeTravail LIKE "'.$_POST['villeTravail-'.$increment].'"';
+                  $resultats=$bdd->query($requete);
+                  $entreprise=$resultats->fetchAll(PDO::FETCH_OBJ);
+                  $resultats->closeCursor();
+                }
+
+                $requete = $bdd->prepare("UPDATE travaildans SET idTravail = :idTravail WHERE idTravailDans = :id");
+                $requete->bindParam(':idTravail', $entreprise[0]->idTravail);
+                $requete->bindParam(':id', $_POST["id-".$increment]);
+                $requete->execute();
+              }
             }
-
-            if($_POST['finTravail-'.$increment] != $travail[0]->debutTravail)
+            else
             {
-              $requete = $bdd->prepare("UPDATE travaildans SET finTravail = :finTravail WHERE idTravailDans = :id");
-              $requete->bindParam(':finTravail', $_POST['finTravail-'.$increment]);
-              $requete->bindParam(':id', $_POST["id-".$increment]);
-              $requete->execute();
+              $increment++;
             }
+          } while (!$find);
+        }
 
-            if($_POST['fonctionTravail-'.$increment] != $travail[0]->fonctionTravail)
-            {
-              $requete = $bdd->prepare("UPDATE travaildans SET fonctionTravail = :fonctionTravail WHERE idTravailDans = :id");
-              $requete->bindParam(':fonctionTravail', $_POST['fonctionTravail-'.$increment]);
-              $requete->bindParam(':id', $_POST["id-".$increment]);
-              $requete->execute();
-            }
+        $increment = 0;
+        for($i=0; $i<$_POST['nbNewTravails']; $i++)
+        {
+          $increment++;
+          $find = false;
 
-            if($_POST['entrepriseTravail-'.$increment] != $travail[0]->entrepriseTravail || $_POST['villeTravail-'.$increment] != $travail[0]->villeTravail)
+          do
+          {
+            if(isset($_POST['debutTravail-new-'.$increment]))
             {
+              $find = true;
+
               $requete='SELECT idTravail
                         FROM travail
-                        WHERE entrepriseTravail = "'.$travail[0]->entrepriseTravail.'" AND villeTravail = "'.$travail[0]->villeTravail.'"';
+                        WHERE entrepriseTravail LIKE "'.$_POST['entrepriseTravail-new-'.$increment].'" AND villeTravail LIKE "'.$_POST['villeTravail-new-'.$increment].'"';
               $resultats=$bdd->query($requete);
               $entreprise=$resultats->fetchAll(PDO::FETCH_OBJ);
               $resultats->closeCursor();
@@ -189,60 +239,63 @@ session_start();
               if(empty($entreprise))
               {
                 $requete = $bdd->prepare("INSERT INTO travail (entrepriseTravail, villeTravail) VALUES (:entreprise, :ville)");
-                $requete->bindParam(':entreprise', $_POST["entrepriseTravail-".$increment]);
-                $requete->bindParam(':ville', $_POST["villeTravail-".$increment]);
+                $requete->bindParam(':entreprise', $_POST["entrepriseTravail-new-".$increment]);
+                $requete->bindParam(':ville', $_POST["villeTravail-new-".$increment]);
                 $requete->execute();
 
                 $requete='SELECT idTravail
                           FROM travail
-                          WHERE entrepriseTravail = "'.$travail[0]->entrepriseTravail.'" AND villeTravail = "'.$travail[0]->villeTravail.'"';
+                          WHERE entrepriseTravail LIKE "'.$_POST['entrepriseTravail-new-'.$increment].'" AND villeTravail LIKE "'.$_POST['villeTravail-new-'.$increment].'"';
                 $resultats=$bdd->query($requete);
                 $entreprise=$resultats->fetchAll(PDO::FETCH_OBJ);
                 $resultats->closeCursor();
               }
 
-              $requete = $bdd->prepare("UPDATE travaildans SET idTravail = :idTravail WHERE idTravailDans = :id");
+              $requete = $bdd->prepare("INSERT INTO travaildans (idUser, idTravail, debutTravail, finTravail, fonctionTravail) VALUES (:idUser, :idTravail, :debutTravail, :finTravail, :fonctionTravail)");
+              $requete->bindParam(':idUser', $_SESSION['id']);
               $requete->bindParam(':idTravail', $entreprise[0]->idTravail);
-              $requete->bindParam(':id', $_POST["id-".$increment]);
+              $requete->bindParam(':debutTravail', $_POST["debutTravail-new-".$increment]);
+              $requete->bindParam(':finTravail', $_POST["finTravail-new-".$increment]);
+              $requete->bindParam(':fonctionTravail', $_POST["fonctionTravail-new-".$increment]);
               $requete->execute();
             }
-          }
-          else
-          {
-            $increment++;
-          }
-        } while (!$find);
+            else
+            {
+              $increment++;
+            }
+          } while (!$find);
+        }
+
       }
-
-    }
-    else if(isset($_POST['removeTravail']))
-    {
-      $requete = $bdd->prepare("DELETE FROM travaildans WHERE idTravailDans = :idTravailDans");
-      $requete->bindParam(':idTravailDans', $_POST["idTravailDans"]);
-      $requete->execute();
-    }
-    else if(isset($_POST['infosPrivees']))
-    {
-
-      if($_POST["mailUser"] != $user[0]->mailUser)
+      else if(isset($_POST['removeTravail']))
       {
-        $requete = $bdd->prepare("UPDATE utilisateur SET mailUser = :mail WHERE idUser = :id");
-        $requete->bindParam(':mail', $_POST["mailUser"]);
-        $requete->bindParam(':id', $_SESSION["id"]);
+        $requete = $bdd->prepare("DELETE FROM travaildans WHERE idTravailDans = :idTravailDans");
+        $requete->bindParam(':idTravailDans', $_POST["idTravailDans"]);
         $requete->execute();
       }
-
-      if($_POST["passwordOld"] == $user[0]->passwordUser)
+      else if(isset($_POST['infosPrivees']))
       {
-        if(!empty($_POST['passwordNew']))
+
+        if($_POST["mailUser"] != $user[0]->mailUser)
         {
-          $requete = $bdd->prepare("UPDATE utilisateur SET passwordUser = :password WHERE idUser = :id");
-          $requete->bindParam(':password', $_POST["passwordNew"]);
+          $requete = $bdd->prepare("UPDATE utilisateur SET mailUser = :mail WHERE idUser = :id");
+          $requete->bindParam(':mail', $_POST["mailUser"]);
           $requete->bindParam(':id', $_SESSION["id"]);
           $requete->execute();
         }
-      }
 
+        if($_POST["passwordOld"] == $user[0]->passwordUser)
+        {
+          if(!empty($_POST['passwordNew']))
+          {
+            $requete = $bdd->prepare("UPDATE utilisateur SET passwordUser = :password WHERE idUser = :id");
+            $requete->bindParam(':password', $_POST["passwordNew"]);
+            $requete->bindParam(':id', $_SESSION["id"]);
+            $requete->execute();
+          }
+        }
+
+      }
     }
   }
 
