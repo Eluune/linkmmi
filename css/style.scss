@@ -61,7 +61,6 @@ html,body
 
 .section-connexion {
   width: calc(100vw - 40px);
-  height: calc(100vh - 20px);
   position: relative;
   top: 10px;
   left: 10px;
@@ -447,7 +446,7 @@ html,body
       }
 
       input {
-        width: calc(100% - 70px);
+        width: calc(100% - 90px);
         padding: .5vw 0 .5vw 1vw;
         transform: translate(6vw, -3vw);
         box-sizing: border-box;

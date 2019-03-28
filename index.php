@@ -58,6 +58,10 @@ session_start();
       }
     }
   }
+  else
+  {
+    $_SESSION["idUser"] = -1;
+  }
 
   // récupération des informations posts utilisateur
   $requete='SELECT topic.idTopic AS "id", topic.contenuTopic AS "contenu", topic.imgTopic AS "imgTopic", topic.dateTopic AS "date", utilisateur.prenomUser AS "prenom", utilisateur.nomUser AS "nom", utilisateur.atnameUser AS "atname", utilisateur.photoUser AS "imgUser"
@@ -93,6 +97,34 @@ session_start();
 
 <body>
   <?php if($connected) { include('php/nav.php'); echo '<div style="height: 60px;"></div>';  } ?>
+
+
+  <!--- Menu -->
+  <?php if($_SESSION["idUser"] != -1): ?>
+      <nav>
+          <div class="blcNav">
+              <figure id="data-user" data-number="<?php echo $current_user[0]->idUser; ?>">
+                <?php
+                  if(!empty($current_user[0]->photoUser && $current_user[0]->photoUser != 'NULL')) { ?> <img src="<?php echo $current_user[0]->photoUser; ?>" alt="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                  else { ?> <img src="img-placeholder/bestLoutre.jpg" title="Compte de <?php echo $current_user[0]->prenomUser.' '.$current_user[0]->nomUser; ?>"> <?php }
+                ?>
+                <figcaption>
+                  <a href="profil.php"></a>
+                </figcaption>
+              </figure>
+              <form action="" method="post">
+                  <input type="text" placeholder="Rechercher">
+              </form>
+          </div>
+              <button class="btn-Icone active"><i class="icofont-link"></i></button>
+          <div class="blcNav">
+              <button class="btn-Icone active"><i class="icofont-home"></i></button>
+              <button class="btn-Icone"><i class="icofont-wechat"></i></button>
+              <button class="btn-Icone"><i class="icofont-heart-alt"></i></button>
+          </div>
+      </nav>
+    <?php endif; ?>
+    <!-- Fin menu -->
 
   <div class="section-connexion">
 
@@ -347,5 +379,5 @@ session_start();
   <script src="js/profil.js" type="text/javascript"></script>
   <?php if($connected){ ?> <script src="js/script-topic.js" type="text/javascript"></script> <?php } ?>
 
-</body>
+  </body>
 </html>
