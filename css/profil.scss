@@ -624,6 +624,53 @@ html,body
                     .highLight{
                         font-size: 0.8em;
                     }
+                    a{
+                      text-decoration: none;
+                      color: black;
+                    }
+                }
+                button{
+                    position: relative;
+                    border-radius: 2em;
+                    font-size: .9em;
+                    padding: .5em .7em;
+                    width: 150px; height: 30px;
+                    transition: .5s;
+                    border: 1px solid grey;
+                    color: grey;
+                    cursor: inherit;
+
+                    &::after{
+                      position: absolute;
+                      top: 50%; left: 0;
+                      width: 100%;
+                      text-align: center;
+                      transform: translateY(-50%);
+                      font-weight: 500;
+                      transition: .5s ease;
+                      content: 'En attente';
+                    }
+
+                    &.unfriends{
+                      border: 1px solid $blue;
+                      background-color: white;
+                      color: $blue;
+                      cursor: pointer;
+                    }
+
+                    &.unfriends:hover{
+                      background-color: $blue;
+                      color: white;
+                    }
+
+                    &.unfriends::after{
+                      content: 'Suivre';
+                    }
+
+                    &.accept::after{
+                      content: 'Accepter le suivi';
+                    }
+
                 }
             }
         }

@@ -30,7 +30,19 @@ $("#friend").click(function()
               },
        success: function (response)
        {
-         $(".nb-like-"+idPost).text(response);
+         if(response == 'suppression')
+            var nbFollow = $('#nbFollower').text().parseInt() - 1;
+         if(response == 'ajout')
+            var nbFollow =  $('#nbFollower').text().parseInt() + 1;
+         if(response != '')
+         {
+           $('#nbFollower').text(nbFollow);
+           if(nbFollow <= 1)
+              $('textFolower').text('Relation');
+           else
+              $('textFolower').text('Relations');
+         }
+
        },
        error: function(jqXHR, textStatus, errorThrown)
        {
@@ -38,6 +50,40 @@ $("#friend").click(function()
        }
     });
   }
+});
+
+// Gérer les relations entre les utilisateurs sur la partie suggestion
+$(".btn-friend").click(function()
+{
+  var idUserCurrent = $('#data-user').attr("data-number");
+  var idUserSelected = $(this).attr("data-number");
+
+  if($(this).hasClass('wait'))
+  {
+    $(this).removeClass();
+    $(this).addClass('friends');
+  }
+  else if($(this).hasClass('unfriends'))
+  {
+    $(this).removeClass();
+  }
+
+  $.ajax
+  ({
+     url: "php/follow.php",
+     type: "post",
+     data: { idUser_suit: idUserCurrent,
+             idUser_suivit: idUserSelected
+            },
+     success: function (response)
+     {
+       console.log(response);
+     },
+     error: function(jqXHR, textStatus, errorThrown)
+     {
+        console.log(textStatus, errorThrow);
+     }
+  });
 });
 
 // Gére l'édition du profil

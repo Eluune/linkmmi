@@ -207,28 +207,6 @@ else
       <div class="contentProfil">
         <div class="descProfil">
           <h3><?php echo $user[0]->prenomUser.' '.$user[0]->nomUser; ?><br><em class="highLight">@<?php echo $atname[0]; ?></em></h3>
-          <?php
-            if(!empty($user[0]->birthdayUser))
-            {
-              $birthday = new DateTime($user[0]->birthdayUser);
-              echo '<p>Né(e) le '.intval($birthday->format('d')).' '.$months[intval($birthday->format('m'))-1].'</p>';
-            }
-            if(!empty($user[0]->descriptionUser))
-            {
-              echo '<p>'.$user[0]->descriptionUser.'</p>';
-            }
-            if(!empty($user[0]->portfolioUser))
-            {
-              echo '<a href="http://'.$user[0]->portfolioUser.'" class="portfolio" target="_blank">Voir le portfolio <i class="icofont-external-link"></i></a>';
-            }
-            if(!empty($travails))
-            {
-              foreach ($travails as $travail)
-              {
-                echo '<p class="travail-'.$travail->id.'">'.$travail->fonction.' à <a href="recherche.php?entreprise='.$travail->id.'" class="highLight">'.$travail->entreprise.' de '.$travail->ville.'</a></p>';
-              }
-            }
-          ?>
           <div class="containerProfilNul">
             <div class="profilNum">
               <span class="textFolower">Relation<?php if($userSuivi>1){ ?>s<?php } ?></span>
@@ -386,40 +364,7 @@ else
 
 
     <div class="other">
-      <div class="suggest">
-        <h3>Suggestion</h3>
-        <div class="blcPpl">
-          <img src="img-placeholder/bestLoutre.jpg" alt="" class="blcPplPict">
-          <p>Sarah Croche <em class="highLight">@Sarah_croche</em></p>
-          <button class="btn-suivre">Suivre</button>
-        </div>
-        <div class="blcPpl">
-          <img src="img-placeholder/bestLoutre.jpg" alt="" class="blcPplPict">
-          <p>Pat Icier <em class="highLight">@Pat_ic</em></p>
-          <button class="btn-suivre">Suivre</button>
-        </div>
-        <div class="subBtn">Voir plus</div>
-      </div>
-      <div class="message">
-        <h3>Message</h3>
-        <div class="blcMess">
-          <img src="img-placeholder/bestLoutre.jpg" alt="" class="blcMessPict">
-          <p>Sarah Croche <em class="highLight">Mar</em></p>
-          <p class="extraitMess">ibzfibsciub</p>
-        </div>
-        <div class="blcMess">
-          <img src="img-placeholder/bestLoutre.jpg" alt="" class="blcMessPict">
-          <p>Pat Icier <em class="highLight">Mar</em></p>
-          <p class="extraitMess">ibzfibsciub</p>
-        </div>
-        <form action="" method="post">
-          <input type="text" placeholder="Rechercher">
-          <button type="submit">?</button>
-        </form>
-        <div class="subBtn">Voir plus</div>
-      </div>
-
-      <em class="highLight">LinkMMI © 2019</em>
+      <?php include('php/suggestions.php'); ?>
     </div>
   </div>
 
