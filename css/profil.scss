@@ -344,7 +344,7 @@ html,body
         border-radius: 5px;
         @extend %shadow;
         padding-top: 1%;
-        padding-bottom: 4%;
+        padding-bottom: 6%;
         box-sizing: border-box;
         z-index: 999;
         margin-bottom: 6vh;
@@ -450,6 +450,10 @@ html,body
           }
         }
 
+        i{
+          transform: translateX(50%);
+        }
+
         i:hover {
           cursor: pointer;
         }
@@ -458,7 +462,7 @@ html,body
           position: absolute;
           left: 30%;
           bottom: -5%;
-          transform: translate(-50%, -50%);
+          transform: translate(-50%, -25%);
           font-size: 2vw;
           transition: .5s;
 
@@ -486,7 +490,7 @@ html,body
           position: absolute;
           left: 36%;
           bottom: -8%;
-          transform: translate(-50%, -50%);
+          transform: translate(-50%, -100%);
           font-size: 1.2vw;
         }
 
@@ -494,7 +498,7 @@ html,body
           position: absolute;
           right: 36%;
           bottom: -5%;
-          transform: translate(-50%, -50%);
+          transform: translate(-50%, -25%);
           font-size: 2vw;
         }
 
@@ -502,7 +506,7 @@ html,body
           position: absolute;
           right: 33%;
           bottom: -8%;
-          transform: translate(-50%, -50%);
+          transform: translate(-50%, -100%);
           font-size: 1.2vw;
         }
       }
@@ -520,6 +524,7 @@ html,body
         padding-right: 4%;
         box-sizing: border-box;
         display: none;
+        z-index: 5;
 
         &:after {
           @extend %style-bottom;
