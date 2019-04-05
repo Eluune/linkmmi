@@ -289,14 +289,23 @@ session_start();
     </div> <!-- Fermeture .section-center -->
 
     <div class="section-right">
-      <div class="message-accueil">
-        <h2>Bienvenue</h2>
-        <div class="content-message">
-          <p>Bienvenue sur notre réseau social LinkMMI. Le but est de partager les créations réaliser par des étudiants de formation MMI ou bien même de connaître le parcours d’ancien de vos camarades. </p>
-          <br>
-          <p>L’équipes LinkMMI vous souhaites une bonne visite sur notre site. </p>
-        </div>
-      </div> <!-- Fermeture .message-accueil -->
+      <?php if(empty($_SESSION['id'])): ?>
+        <div class="message-accueil">
+          <h2>Bienvenue</h2>
+          <div class="content-message">
+            <p>Bienvenue sur LinkMMI, le réseau social des étudiants ! Partagez votre expérience, vos créations et faites vous un réseau qui vous aidera professionnellement.</p>
+            <br>
+            <p>L’équipe LinkMMI vous souhaites une bonne visite sur notre site. </p>
+          </div>
+        </div> <!-- Fermeture .message-accueil -->
+      <?php else: ?>
+        <div class="message-accueil">
+          <h2>Bienvenue <?php echo $current_user[0]->prenomUser ?></h2>
+          <div class="content-message">
+            <p>Vous trouverez ici quelques recommandations qui vous aiderons à découvrir de nouveaux profils intéressant pour votre réseau.</p>
+          </div>
+        </div> <!-- Fermeture .message-accueil -->
+      <?php endif; ?>
     </div> <!-- Fermeture .section-right -->
 
   </div>
