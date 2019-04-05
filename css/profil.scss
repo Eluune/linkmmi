@@ -252,6 +252,89 @@ html,body
       grid-area: Flu;
       position: relative;
 
+      .profils
+      {
+        width: calc(100% - 20px);
+        background-color: $grey;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        border-radius: 5px;
+        @extend %shadow;
+        padding-top: 4%;
+        padding-bottom: 4%;
+        box-sizing: border-box;
+        z-index: 999;
+        margin-bottom: 2vh;
+
+        .utilisateur
+        {
+          margin-left: 4%;
+
+          .photo-utilisateur
+          {
+            width: 4vw;
+            height: 4vw;
+            border-radius: 50%;
+            background-color: $yellow;
+            float: left;
+
+            img
+            {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center;
+              border-radius: 50%;
+            }
+          }
+
+          .info-utilisateur
+          {
+            transform: translate(20px, 5px);
+
+            h2
+            {
+              font-weight: normal;
+              font-size: 1.4vw;
+            }
+
+            a
+            {
+              color: $yellow;
+              text-decoration: none;
+              font-size: .8vw;
+              font-weight: lighter;
+            }
+          }
+
+          button
+          {
+            position: absolute;
+            top: 50%;
+            right: 4%;
+            transform: translate(0, -50%);
+            background-color: transparent;
+            padding: 5px 30px;
+            font-size: 1vw;
+            color: $blue;
+
+            border:
+            {
+              radius: 100px;
+              width: 1px;
+              style: solid;
+              color: $blue;
+            }
+
+            &:hover
+            {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
       .actualitées {
         width: calc(100% - 20px);
         background-color: $grey;
@@ -263,7 +346,7 @@ html,body
         padding-top: 1%;
         padding-bottom: 4%;
         box-sizing: border-box;
-        z-index: 99;
+        z-index: 999;
         margin-bottom: 6vh;
 
         &:after {
